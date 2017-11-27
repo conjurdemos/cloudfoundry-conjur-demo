@@ -1,0 +1,9 @@
+---
+applications:
+- name: hello-world
+  services:
+  - conjur
+  buildpacks:
+  - meta
+  - ruby
+  - conjur

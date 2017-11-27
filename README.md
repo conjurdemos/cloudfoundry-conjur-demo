@@ -1,2 +1,2 @@
 # cloudfoundry-conjur-demo
-Demo for Conjur CloudFoundry integration
+To start the demo, run `./bin/start`.

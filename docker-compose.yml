@@ -1,0 +1,24 @@
+version: "2"
+
+services:
+  conjur:
+    image: cyberark/conjur:0.1.0-stable
+    environment:
+      CONJUR_APPLIANCE_URL: http://localhost:3000
+      DATABASE_URL: postgres://postgres@pg/postgres
+      CONJUR_ADMIN_PASSWORD: admin
+      PORT: 3000
+      RAILS_ENV:
+    ports: [ "3000:3000" ]
+    volumes: [ "./tmp:/app_tmp"]
+    entrypoint: |
+      bash -c "export CONJUR_DATA_KEY=\"`conjurctl data-key generate`\" && \
+               conjurctl db migrate && \
+               conjurctl account create default | tail -n1 | awk '{print $$NF}' > /app_tmp/api_key && \
+               conjurctl server"
+
+  pg:
+    image: postgres:9.3
+
+networks:
+  default:
