@@ -59,7 +59,7 @@ pushd conjur-service-broker
   done
   echo "Done."
 
-  cf create-service conjur default conjur
+  cf create-service cyberark-conjur default cyberark-conjur
 popd
 
 # start test app
@@ -68,5 +68,5 @@ pushd test_app
 popd
 
 # bind service to test app
-cf bind-service test-app conjur
-cf restage test-app
+cf bind-service test-app cyberark-conjur
+cf start test-app
