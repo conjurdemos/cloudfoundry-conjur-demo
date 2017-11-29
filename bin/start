@@ -63,6 +63,10 @@ pushd conjur-service-broker
 popd
 
 # start test app
-pushd app
-  cf push --random-route
+pushd test_app
+  cf push test-app --no-start --random-route
 popd
+
+# bind service to test app
+cf bind-service test-app conjur
+cf restage test-app
