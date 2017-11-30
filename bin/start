@@ -44,7 +44,7 @@ pushd conjur-service-broker
   echo "Done."
 
   cf set-env conjur-service-broker CONJUR_ACCOUNT default
-  cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://192.168.11.1:3000
+  cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io:3000
   cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN admin
   cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$(cat $ROOT_DIR/tmp/api_key)"
 
