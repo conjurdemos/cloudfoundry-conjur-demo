@@ -1,6 +1,6 @@
 require 'sinatra/base'
 
-class FooApp < Sinatra::Application
+class TestApp < Sinatra::Application
 
   configure do
     set :bind, '0.0.0.0'

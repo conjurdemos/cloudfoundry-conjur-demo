@@ -1,2 +1,2 @@
-require './foo'
-run FooApp
+require './test_app'
+run TestApp
