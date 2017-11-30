@@ -20,5 +20,16 @@ services:
   pg:
     image: postgres:9.3
 
+  client:
+    image: conjurinc/cli5
+    depends_on: [ conjur ]
+    environment:
+      CONJUR_APPLIANCE_URL: http://conjur:3000
+      CONJUR_ACCOUNT: default
+      CONJUR_AUTHN_API_KEY:
+      CONJUR_AUTHN_LOGIN: admin
+    volumes:
+      - ./policy:/policy
+
 networks:
   default:

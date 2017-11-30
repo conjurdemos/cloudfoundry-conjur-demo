@@ -1,6 +1,0 @@
-[submodule "conjur-service-broker"]
-	path = conjur-service-broker
-	url = git@github.com:conjurinc/conjur-service-broker.git
-[submodule "cloudfoundry-conjur-buildpack"]
-	path = cloudfoundry-conjur-buildpack
-	url = git@github.com:conjurinc/cloudfoundry-conjur-buildpack.git
