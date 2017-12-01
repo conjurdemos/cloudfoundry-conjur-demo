@@ -19,15 +19,10 @@ pushd meta-buildpack
 popd
 rm -rf meta-buildpack
 
-rm -rf cloudfoundry-conjur-buildpack
-git clone git@github.com:conjurinc/cloudfoundry-conjur-buildpack.git
 pushd cloudfoundry-conjur-buildpack
   ./upload
 popd
-rm -rf cloudfoundry-conjur-buildpack
 
-rm -rf conjur-service-broker
-git clone git@github.com:conjurinc/conjur-service-broker.git
 pushd conjur-service-broker
   cf push --no-start --random-route
 
@@ -62,7 +57,6 @@ pushd conjur-service-broker
 
   cf create-service cyberark-conjur default conjur
 popd
-rm -rf conjur-service-broker
 
 pushd app
   cf push --no-start
