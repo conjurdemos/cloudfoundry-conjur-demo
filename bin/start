@@ -20,7 +20,7 @@ popd
 rm -rf meta-buildpack
 
 pushd cloudfoundry-conjur-buildpack
-  ./upload
+  ./upload.sh
 popd
 
 pushd conjur-service-broker
@@ -38,6 +38,8 @@ pushd conjur-service-broker
   done
   echo "Done."
 
+  cf set-env conjur-service-broker SECURITY_USER_NAME TEMPORARY
+  cf set-env conjur-service-broker SECURITY_USER_PASSWORD TEMPORARY
   cf set-env conjur-service-broker CONJUR_ACCOUNT default
   cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io:3000
   cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN admin
@@ -49,13 +51,14 @@ pushd conjur-service-broker
   cf create-service-broker conjur-service-broker "TEMPORARY" "TEMPORARY" $APP_URL --space-scoped
 
   printf "Waiting for Conjur to be ready... "
-  while [[ ! `curl -X HEAD -is localhost:3000 | head -n1 | awk '{print $2}'` -eq '200' ]]
+  while [[ ! $(curl -o /dev/null -s -w '%{http_code}\n' localhost:3000) == 200 ]]
   do
+    echo "."
     sleep 1
   done
   echo "Done."
 
-  cf create-service cyberark-conjur default conjur
+  cf create-service cyberark-conjur community conjur
 popd
 
 pushd app
