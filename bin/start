@@ -38,8 +38,8 @@ pushd conjur-service-broker
   done
   echo "Done."
 
-  cf set-env conjur-service-broker AUTH_USERNAME TEMPORARY
-  cf set-env conjur-service-broker AUTH_PASSWORD TEMPORARY
+  cf set-env conjur-service-broker SECURITY_USER_NAME TEMPORARY
+  cf set-env conjur-service-broker SECURITY_USER_PASSWORD TEMPORARY
   cf set-env conjur-service-broker CONJUR_ACCOUNT default
   cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io:3000
   cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN admin
