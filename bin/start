@@ -1,12 +1,12 @@
 #!/bin/bash -e
-API_KEY=$1
-ACCOUNT=$2
+ACCOUNT=$1
+API_KEY=$2
 APP_NAME="hello-world"
 
-if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
+if [[ "$#" -ne "2" ]]
   then
-    echo "Missing required argument"
-    echo "Correct usage: ./bin/start CONJUR_ACCOUNT CONJUR_API_KEY"
+    echo -e "Missing required argument"
+    echo -e "Correct usage: ./bin/start CONJUR_ACCOUNT CONJUR_API_KEY"
     exit 1
 fi
 
@@ -28,44 +28,52 @@ docker run -d -it -v $PWD:/work -w /work \
     conjur variable values add app/stripe/private_key "a stripe private_key"
   '
 
-echo "-------------------------------------------"
-echo "CONJUR POLICY LOAD"
-echo "Setting db username to 'a database username'"
-echo "Setting db password to 'a database password'"
-echo "Setting stripe private key to 'a stripe private_key'"
-echo "-------------------------------------------"
+echo -e "\n\n-------------------------------------------"
+echo -e "CONJUR POLICY LOAD"
+echo -e "Set db username to 'a database username'"
+echo -e "Set db password to 'a database password'"
+echo -e "Set stripe private key to 'a stripe private_key'"
+echo -e "-------------------------------------------\n\n"
 
 # create a space for the demo app
 cf create-space demo
 cf target -s demo
 
+echo -e "\n\nCreated demo space\n\n"
+
 # create the Conjur service
 cf create-service cyberark-conjur community conjur
+
+echo -e "\n\nCreated Conjur service\n\n"
 
 # push the app without starting it
 pushd app
   cf push --no-start
 popd
 
+echo -e "\n\nPushed the demo 'hello-world' app\n\n"
+
 # load the base policy
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g')
 
-echo "Host GUID: $APP_HOST_NAME"
+echo -e "\n\nRetrieved host GUID: $APP_HOST_NAME\n\n"
 
 # add an entitlement for the new host
 docker run -d -it -v $PWD:/work -w /work \
   -e CONJUR_AUTHN_API_KEY="$API_KEY" \
-  -e APP_HOST_NAME="$APP_HOST_NAME" \
   -e CONJUR_AUTHN_LOGIN="admin" \
   -e CONJUR_ACCOUNT="$ACCOUNT" \
   -e CONJUR_APPLIANCE_URL="eval.conjur.org" \
+  -e APP_HOST_NAME="$APP_HOST_NAME" \
   --entrypoint bash conjurinc/cli5 -c '
     replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
     cat policy/entitlements.yml | sed -e "$replace" | conjur policy load root -
   '
 
+echo -e "\n\nUpdated policy grants to grant host access to secrets\n\n"
+
 pushd app
   cf start $APP_NAME
 popd
 
-echo "App was deployed to $(cf app hello-world | grep routes | awk '{print $NF}')"
+echo -e "\n\nApp was deployed to $(cf app hello-world | grep routes | awk '{print $NF}')\n"
