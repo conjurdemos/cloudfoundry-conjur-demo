@@ -29,8 +29,8 @@ docker run -d -it -v $PWD:/work -w /work \
   '
 
 # create a space for the demo app
-cf create-space demo
-cf target -s demo
+cf create-space cyberark-conjur-demo
+cf target -s cyberark-conjur-demo
 
 # create the Conjur service
 cf create-service cyberark-conjur community conjur

@@ -9,5 +9,5 @@ fatal () {
 
 cf delete hello-world -f || true
 cf delete-service conjur -f || true
-cf delete-space demo -f || true
+cf delete-space cyberark-conjur-demo -f || true
 
