@@ -1,0 +1,35 @@
+#!/bin/bash -e
+ACCOUNT=$1
+API_KEY=$2
+APPEND_STRING=$3
+APP_NAME="hello-world"
+
+if [[ "$#" -lt "2" ]]
+  then
+    echo -e "Missing required argument"
+    echo -e "Correct usage: ./bin/start CONJUR_ACCOUNT CONJUR_API_KEY [APPEND_STRING]"
+    exit 1
+fi
+
+if [[ -z "$APPEND_STRING" ]]
+  then
+    APPEND_STRING=$RANDOM
+fi
+
+# rotate secret values
+docker run -d -it -v $PWD:/work -w /work \
+  -e CONJUR_AUTHN_API_KEY="$API_KEY" \
+  -e CONJUR_AUTHN_LOGIN="admin" \
+  -e CONJUR_ACCOUNT="$ACCOUNT" \
+  -e CONJUR_APPLIANCE_URL="eval.conjur.org" \
+  -e APPEND_STRING="$APPEND_STRING" \
+  --entrypoint bash conjurinc/cli5 -c '
+    conjur variable values add app/database/username "a database username $APPEND_STRING";
+    conjur variable values add app/database/password "a database password $APPEND_STRING";
+    conjur variable values add app/stripe/private_key "a stripe private_key $APPEND_STRING"
+  '
+
+cf restage $APP_NAME
+
+echo -e "\n\nThe secret values have been updated by appending $APPEND_STRING"
+echo -e "\nThe app has been restaged, and it is now available at $(cf app hello-world | grep routes | awk '{print $NF}')\n"

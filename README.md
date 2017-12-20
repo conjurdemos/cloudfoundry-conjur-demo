@@ -21,28 +21,7 @@ It creates a `demo` space within your org, creates the Conjur service, and deplo
 
 The start-up script will output the URL for the test app. If you navigate to this URL, you will see that the app has access to the secrets that it retrieved from Conjur using its buildpack, with machine identity provided by the Conjur Service Broker.
 
-To verify that the service is in fact retrieving the actual secrets from Conjur, you can rotate the secrets and then restage the app, and it will display the new secret values that you set. Directions for that follow.
+To verify that the service is in fact retrieving the actual secrets from Conjur, you can rotate the secrets and then restage the app, and it will display the new secret values that you set. We have included a script for your convenience that will allow you to do that. To use it, run:
+`./bin/rotate CONJUR_ACCOUNT CONJUR_API_KEY [APPEND_STRING]`
 
-Rotate secrets:
-
-```
-docker run -d -it -v $PWD:/work -w /work \
-  -e CONJUR_AUTHN_API_KEY="$API_KEY" \
-  -e APP_HOST_NAME="$APP_HOST_NAME" \
-  -e CONJUR_AUTHN_LOGIN="admin" \
-  -e CONJUR_ACCOUNT="$ACCOUNT" \
-  -e CONJUR_APPLIANCE_URL="eval.conjur.org" \
-  --entrypoint bash conjurinc/cli5 -c "
-conjur variable values add app/database/username 'a database username 123';
-conjur variable values add app/database/password 'a database password 456';
-conjur variable values add app/stripe/private_key 'a stripe private_key 789'
-"
-```
-
-Then restage the app:
-
-```
-cf restage hello-world
-```
-
-Observe the new secret values by refreshing the `hello-world` app in your browser window.
+The rotate script appends a random number to the end of the original secret values, unless you specify an `APPEND_STRING` - in that case, the script appends your string to the original secret values. It then restages the app, so that if you refresh your browser window you will see the updated secret values in your application.
