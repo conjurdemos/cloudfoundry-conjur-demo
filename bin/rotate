@@ -1,15 +1,6 @@
 #!/bin/bash -e
-ACCOUNT=$1
-API_KEY=$2
-APPEND_STRING=$3
+APPEND_STRING=$1
 APP_NAME="hello-world"
-
-if [[ "$#" -lt "2" ]]
-  then
-    echo -e "Missing required argument"
-    echo -e "Correct usage: ./bin/start CONJUR_ACCOUNT CONJUR_API_KEY [APPEND_STRING]"
-    exit 1
-fi
 
 if [[ -z "$APPEND_STRING" ]]
   then

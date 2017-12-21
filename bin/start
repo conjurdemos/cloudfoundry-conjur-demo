@@ -1,15 +1,5 @@
 #!/bin/bash -e
-ACCOUNT=$1
-API_KEY=$2
 APP_NAME="hello-world"
-
-if [[ "$#" -ne "2" ]]
-  then
-    echo -e "Missing required argument"
-    echo -e "Correct usage: ./bin/start CONJUR_ACCOUNT CONJUR_API_KEY"
-    exit 1
-fi
-
 
 # stop will make sure PCFDev is running and the `cf` binary is installed
 ./bin/stop
