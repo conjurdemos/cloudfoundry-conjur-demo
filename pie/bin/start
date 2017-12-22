@@ -1,6 +1,16 @@
 #!/bin/bash -e
 APP_NAME="hello-world"
 
+fatal () {
+  echo "$@" >&2
+  exit 1
+}
+
+if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
+  then
+    fatal "Your Conjur API Key and/or Account are missing from the environment."
+fi
+
 # stop will make sure PCFDev is running and the `cf` binary is installed
 ./bin/stop
 

@@ -60,18 +60,27 @@ pushd conjur-service-broker
   cf create-service cyberark-conjur community conjur
 popd
 
+# load policy
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" \
+  --entrypoint bash client -c "
+    conjur policy load --replace root /policy/root.yml
+    conjur variable values add app/database/username 'a database username'
+    conjur variable values add app/database/password 'a database password'
+    conjur variable values add app/stripe/private_key 'a stripe private_key'
+  "
+
 pushd ../app
   cf push --no-start
 popd
 
-# load policy and add entitlements
+# add entitlements
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g')
-docker-compose run --rm -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" --entrypoint bash client -c "
-  cat /policy/root.yml /policy/entitlements.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load --replace root -
-  conjur variable values add app/database/username 'a database username'
-  conjur variable values add app/database/password 'a database password'
-  conjur variable values add app/stripe/private_key 'a stripe private_key'
-"
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" \
+  --entrypoint bash client -c "
+    cat /policy/entitlements.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load root -
+  "
 
 pushd ../app
   cf start $APP_NAME
