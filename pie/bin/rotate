@@ -22,5 +22,5 @@ docker run -d -it -v $PWD:/work -w /work \
 
 cf restage $APP_NAME
 
-echo -e "\n\nThe secret values have been updated by appending $APPEND_STRING"
-echo -e "\nThe app has been restaged, and it is now available at $(cf app hello-world | grep routes | awk '{print $NF}')\n"
+echo -e "\n\nThe secret values have been updated by appending '$APPEND_STRING'"
+echo -e "\nThe app has been restaged, and it is now available at $(cf app $APP_NAME | grep routes | awk '{print $NF}')\n"

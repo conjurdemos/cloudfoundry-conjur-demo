@@ -26,7 +26,7 @@ cf target -s cyberark-conjur-demo
 cf create-service cyberark-conjur community conjur
 
 # push the app without starting it
-pushd app
+pushd ../app
   cf push --no-start
 popd
 
@@ -45,7 +45,7 @@ docker run -d -it -v $PWD:/work -w /work \
     cat policy/entitlements.yml | sed -e "$replace" | conjur policy load root -
   '
 
-pushd app
+pushd ../app
   cf start $APP_NAME
 popd
 
@@ -55,7 +55,7 @@ echo -e "Set db password to 'a database password'"
 echo -e "Set stripe private key to 'a stripe private_key'\n"
 echo -e "A demo space was created in the PCF deploy.\n"
 echo -e "The Conjur service was created.\n"
-echo -e "The demo 'hello-world' app was pushed to PCF.\n"
+echo -e "The demo '$APP_NAME' app was pushed to PCF.\n"
 echo -e "Retrieved host GUID: $APP_HOST_NAME.\n"
 echo -e "Updated policy grants to grant host access to secrets\n"
-echo -e "The demo 'hello-world' app was deployed to $(cf app hello-world | grep routes | awk '{print $NF}')\n"
+echo -e "The demo '$APP_NAME' app was deployed to $(cf app $APP_NAME | grep routes | awk '{print $NF}')\n"
