@@ -5,7 +5,6 @@ fatal () {
   exit 1
 }
 
-[[ $PWD == *"local"* ]] || fatal "You must be working from the local/ directory when running this script."
 [[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH"
 [[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
 
