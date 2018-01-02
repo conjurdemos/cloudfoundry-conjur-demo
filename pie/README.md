@@ -4,10 +4,10 @@ To run this demo, you must be working from the `pie` directory.
 
 ## Steps to take before running demo
 Before beginning the demo, you will need to:
-- Install the Conjur Service Tile for PCF in the Ops Manager. The Conjur Service Tile for PCF requires that you have a running Conjur instance. You can quickly get Conjur running by visiting [the hosted Conjur page](https://www.conjur.org/get-started/try-conjur.html) to sign up for a hosted Conjur instance. We will use this throughout the demo; keep your Account ID and API Key ready to use.
+- Install the Conjur Service Tile for PCF in the Ops Manager. The Conjur Service Tile for PCF must be configured with credentials for a running Conjur instance. You can quickly get Conjur running by visiting [the hosted Conjur page](https://www.conjur.org/get-started/try-conjur.html) to sign up for a hosted Conjur instance. We will use this throughout the demo; keep your Account ID and API Key ready to use.
 - Log into your Cloud Foundry deployment via the command line using `cf login` and target the org where you would like to deploy this demo with `cf target`. You can verify that your installation of the Conjur Service Tile for PCF is functioning correctly by verifying that the `cyberark-conjur` service is available when you run `cf marketplace`.
-- Store the Conjur Account ID and API Key in the OSX keychain and install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed
-  - We will add the Conjur account info to the OSX keychain by calling:
+- Install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
+  - Store the Conjur Account ID and API Key in the OSX keychain by calling:
 ```
 $ security add-generic-password -s "summon" -a "conjur_pie/account" -w "ACCOUNTID"
 $ security add-generic-password -s "summon" -a "conjur_pie/api_key" -w "APIKEY"
@@ -32,4 +32,4 @@ The start-up script will output the URL for the test app. If you navigate to thi
 To verify that the service is in fact retrieving the actual secrets from Conjur, you can rotate the secrets and then restage the app, and it will display the new secret values that you set. We have included a [script](bin/rotate) for your convenience that will allow you to do that. To use it, run:
 `summon -p keyring.py ./bin/rotate [APPEND_STRING]`
 
-The rotate script appends a random number to the end of the original secret values, unless you specify an `APPEND_STRING` - in that case, the script appends your string to the original secret values. It then restages the app, so that if you refresh your browser window you will see the updated secret values in your application.
+The rotate script appends a random number to the end of the original secret values, unless you specify an `APPEND_STRING` argument to the script - in that case, the script appends your string to the original secret values. It then restages the app, so that if you refresh your browser window you will see the updated secret values in your application.
