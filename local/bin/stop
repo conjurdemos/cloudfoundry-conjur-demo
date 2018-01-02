@@ -8,7 +8,9 @@ fatal () {
 [[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH"
 [[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
 
-cf delete-space demo -f || true
+cf delete hello-world -f || true
+cf delete-service conjur -f || true
+cf delete-space cyberark-conjur-demo -f || true
 
 rm -rf tmp/api_key
 

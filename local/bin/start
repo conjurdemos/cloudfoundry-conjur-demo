@@ -3,16 +3,15 @@ BIN_DIR=$(cd "$(dirname $0)/."  && pwd)
 ROOT_DIR=$BIN_DIR/../
 APP_NAME="hello-world"
 
-# stop will make sure PCFDev is running and the `cf` binary is installed
+# stop will check the dir, make sure PCFDev is running and the `cf` binary is installed
 ./bin/stop
 
 docker-compose up -d conjur pg
 
-cf create-space demo
-cf target -s demo
+cf create-space cyberark-conjur-demo
+cf target -s cyberark-conjur-demo
 
-rm -rf meta-buildpack
-git clone https://github.com/cf-platform-eng/meta-buildpack.git
+git clone git@github.com:cf-platform-eng/meta-buildpack.git
 pushd meta-buildpack
   ./build
   ./upload
@@ -61,19 +60,39 @@ pushd conjur-service-broker
   cf create-service cyberark-conjur community conjur
 popd
 
-pushd app
+# load policy
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" \
+  --entrypoint bash client -c "
+    conjur policy load --replace root /policy/root.yml
+    conjur variable values add app/database/username 'a database username'
+    conjur variable values add app/database/password 'a database password'
+    conjur variable values add app/stripe/private_key 'a stripe private_key'
+  "
+
+pushd ../app
   cf push --no-start
 popd
 
-# run policy
+# add entitlements
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g')
-docker-compose run --rm -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" --entrypoint bash client -c "
-cat /policy/root.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load root -
-conjur variable values add app/database/username 'a database username'
-conjur variable values add app/database/password 'a database password'
-conjur variable values add app/stripe/private_key 'a stripe private_key'
-"
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" \
+  --entrypoint bash client -c "
+    cat /policy/entitlements.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load root -
+  "
 
-pushd app
+pushd ../app
   cf start $APP_NAME
 popd
+
+echo -e "\n\nA demo space was created in the PCF deploy.\n"
+echo -e "The buildpacks were uploaded to PCF.\n"
+echo -e "The service broker was uploaded and installed.\n"
+echo -e "The root Conjur policy was loaded:"
+echo -e "Set db username to 'a database username'"
+echo -e "Set db password to 'a database password'"
+echo -e "Set stripe private key to 'a stripe private_key'\n"
+echo -e "The demo '$APP_NAME' app was pushed to PCF.\n"
+echo -e "Updated policy grants to grant host access to secrets\n"
+echo -e "The demo '$APP_NAME' app was deployed to $(cf app $APP_NAME | grep routes | awk '{print $NF}')\n"

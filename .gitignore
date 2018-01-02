@@ -1,2 +1,3 @@
-tmp
 .idea/
+local/tmp
+local/meta-buildpack
