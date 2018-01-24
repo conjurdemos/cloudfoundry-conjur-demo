@@ -72,6 +72,9 @@ docker-compose run --rm \
 
 pushd ../app
   cf push --no-start
+
+  # Bind done automatically during cf push due to app's manifest.yml file
+  # cf bind-service $APP_NAME conjur
 popd
 
 # add entitlements
