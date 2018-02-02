@@ -2,11 +2,14 @@
 To run this demo, you must be working from the `local` directory.
 
 ## Preparing to run the demo
-Before starting the demo, ensure you have PCF Dev running and you are logged in.
-If you are not logged in, you will need to run `cf login -a api.local.pcfdev.io --skip-ssl-validation` before running the demo script.
+**YOU MUST HAVE [PCF DEV](https://pivotal.io/pcf-dev) INSTALLED** to run this demo.
+
+If you have not worked with PCF Dev before, it is a great idea to work through [Pivotal's introduction](https://pivotal.io/platform/pcf-tutorials/getting-started-with-pivotal-cloud-foundry-dev/introduction), which will help you install PCF Dev, the CF CLI, and deploy a sample app.
+
+Once you have PCF Dev installed, running, and logged in, you can run through this demo.
 
 ## Running the demo
-To start the demo, run `./bin/start`.
+To run the demo, you can step through the scripts in [./bin/](bin/) one by one in order, or you can run [./bin/start](bin/start) to run the suite.
 
 Visit `http://hello-world.local.pcfdev.io` and observe the running app displaying secrets retrieved from Conjur by the build-pack, with machine identity provided via the service broker.
 

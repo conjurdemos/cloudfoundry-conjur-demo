@@ -1,0 +1,12 @@
+#!/bin/bash -e
+APP_NAME="hello-world"
+
+api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{default:user:admin}].api_key" 2>/dev/null')
+
+# add entitlements
+APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g')
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$api_key" \
+  --entrypoint bash client -c "
+    cat /policy/entitlements.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load root -
+  "

@@ -7,9 +7,11 @@ if [[ -z "$APPEND_STRING" ]]
     APPEND_STRING=$RANDOM
 fi
 
+api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{default:user:admin}].api_key" 2>/dev/null')
+
 # rotate secret values
 docker-compose run --rm \
-  -e CONJUR_AUTHN_API_KEY="$(cat tmp/api_key)" \
+  -e CONJUR_AUTHN_API_KEY="$api_key" \
   -e APPEND_STRING="$APPEND_STRING" \
   --entrypoint bash client -c '
     conjur variable values add app/database/username "a database username $APPEND_STRING"

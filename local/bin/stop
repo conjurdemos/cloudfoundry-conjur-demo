@@ -1,16 +1,9 @@
 #!/bin/bash -e
 
-fatal () {
-  echo "$@" >&2
-  exit 1
-}
-
-[[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH"
-[[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
-
 cf delete hello-world -f || true
 cf delete-service conjur -f || true
 cf delete-space cyberark-conjur-demo -f || true
+cf delete-org cyberark -f || true
 
 rm -rf tmp/api_key
 

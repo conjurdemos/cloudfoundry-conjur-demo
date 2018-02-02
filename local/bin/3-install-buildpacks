@@ -1,0 +1,24 @@
+#!/bin/bash -e
+
+# get the meta-buildpack and upload to cf
+curl -L $(curl -s https://api.github.com/repos/cf-platform-eng/meta-buildpack/releases/latest | jq -r ".zipball_url") > meta-buildpack.zip
+unzip meta-buildpack.zip
+repo_dir=$(ls | grep cf-platform-eng-meta-buildpack)
+mv $repo_dir meta-buildpack
+
+pushd meta-buildpack
+  ./build
+  ./upload
+popd
+rm -rf meta-buildpack*
+
+# get the Conjur buildpack and upload to cf
+curl -L $(curl -s https://api.github.com/repos/cyberark/cloudfoundry-conjur-buildpack/releases/latest | jq -r ".zipball_url") > cloudfoundry-conjur-buildpack.zip
+unzip cloudfoundry-conjur-buildpack.zip
+repo_dir=$(ls | grep cyberark-cloudfoundry-conjur-buildpack)
+mv $repo_dir cloudfoundry-conjur-buildpack
+
+pushd cloudfoundry-conjur-buildpack
+  ./upload.sh
+popd
+rm -rf cloudfoundry-conjur-buildpack*
