@@ -1,9 +1,11 @@
 #!/bin/bash -e
 
 ./bin/0-check-dependencies
-./bin/1-prepare-space
-./bin/2-install-buildpacks
-./bin/3-install-service-broker
-./bin/4-load-initial-policy
-./bin/5-upload-and-privilege-app
-./bin/6-print-summary
+./bin/1-start-conjur-and-prep-space
+./bin/2-load-secrets-into-conjur
+./bin/3-install-buildpacks
+./bin/4-install-service-broker
+./bin/5-push-and-bind-app
+./bin/6-privilege-app
+./bin/7-start-app
+./bin/8-print-summary
