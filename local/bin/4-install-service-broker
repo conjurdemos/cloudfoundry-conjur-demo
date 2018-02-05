@@ -13,11 +13,7 @@ pushd conjur-service-broker
 popd
 rm -rf conjur-service-broker*
 
-# wait for Conjur to get admin api key
-docker-compose exec -T conjur conjurctl wait -r 30 -p 80
 api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{default:user:admin}].api_key" 2>/dev/null')
-
-echo "API key: $api_key"
 
 # configuring the SB env
 cf set-env conjur-service-broker SECURITY_USER_NAME TEMPORARY
