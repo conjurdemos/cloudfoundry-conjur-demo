@@ -14,8 +14,6 @@ else
 
   # configure Conjur
   docker-compose exec -T \
-    -e CONJUR_AUTHN_LOGIN=admin \
-    -e CONJUR_AUTHN_API_KEY=secret \
     conjur_4 bash -c "
       /opt/conjur/evoke/bin/wait_for_conjur
       evoke ca regenerate conjur_4

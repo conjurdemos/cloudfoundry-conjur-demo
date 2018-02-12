@@ -7,9 +7,6 @@ APP_NAME="hello-world"
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g; s/,$//g')
 APP_HOST_NAME=$(echo $APP_HOST_NAME | sed 's/pcf\///g')
 
-echo "host name: $APP_HOST_NAME"
-
-
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
   api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:user:pcf-admin}].api_key" 2>/dev/null')
@@ -25,12 +22,13 @@ else
   api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['pcf-admin'].api_key\" 2>/dev/null")
 
   # reload the PCF policy with the entitlement added
-  docker-compose run --rm \
-    -e CONJUR_AUTHN_LOGIN=pcf-admin \
-    -e CONJUR_AUTHN_API_KEY=$api_key \
-    -e APP_HOST_NAME=$APP_HOST_NAME\
-    --entrypoint bash conjur_4 -c "
+  docker-compose exec -T conjur_4 \
+    env APP_HOST_NAME=$APP_HOST_NAME \
+    env CONJUR_AUTHN_API_KEY=$api_key \
+    env CONJUR_AUTHN_LOGIN=pcf-admin \
+    bash -c '
       replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
-      cat /etc/pcf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group pcf-admin-group -
-    "
+      cd /etc/policy/
+      cat /etc/policy/pcf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group pcf-admin-group
+    '
 fi
