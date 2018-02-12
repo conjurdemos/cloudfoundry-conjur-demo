@@ -17,6 +17,7 @@ docker run -d -it -v $PWD:/work -w /work \
     conjur variable values add app/stripe/private_key "a stripe private_key"
   '
 
-# create a space for the demo app
+cf create-org cyberark
+cf target -o cyberark
 cf create-space cyberark-conjur-demo
 cf target -s cyberark-conjur-demo
