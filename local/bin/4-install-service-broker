@@ -14,7 +14,7 @@ popd
 rm -rf conjur-service-broker*
 
 # get pcf-admin API key
-if "$CONJUR_VERSION" -eq "5"
+if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
   api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:user:pcf-admin}].api_key" 2>/dev/null')
   app_url="http://host.pcfdev.io"

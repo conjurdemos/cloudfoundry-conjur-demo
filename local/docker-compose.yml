@@ -29,9 +29,9 @@ services:
 
   client:
     image: conjurinc/cli5
-    depends_on: [ conjur ]
+    depends_on: [ conjur_5 ]
     environment:
-      CONJUR_APPLIANCE_URL: http://conjur
+      CONJUR_APPLIANCE_URL: http://conjur_5
       CONJUR_ACCOUNT: default
       CONJUR_AUTHN_API_KEY:
       CONJUR_AUTHN_LOGIN: admin
