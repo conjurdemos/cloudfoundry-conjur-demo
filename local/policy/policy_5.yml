@@ -1,9 +1,0 @@
-- !user
-  id: pcf-admin
-
-- !group
-  id: pcf-admin-group
-
-- !grant
-  role: !group pcf-admin-group
-  member: !user pcf-admin
