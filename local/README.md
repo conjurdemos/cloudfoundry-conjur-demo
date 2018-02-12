@@ -9,6 +9,8 @@ If you have not worked with PCF Dev before, it is a great idea to work through [
 Once you have PCF Dev installed, running, and logged in, you can run through this demo.
 
 ## Running the demo
+This demo will work with either v4 or v5 Conjur. Before starting, set your `CONJUR_VERSION` environment variable to the version you would like to demo (either 4 or 5).
+
 To run the demo, you can step through the scripts in [./bin/](bin/) one by one in order, or you can run [./bin/start](bin/start) to run the suite.
 
 Visit `http://hello-world.local.pcfdev.io` and observe the running app displaying secrets retrieved from Conjur by the build-pack, with machine identity provided via the service broker.

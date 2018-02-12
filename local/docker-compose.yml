@@ -1,7 +1,7 @@
 version: "2"
 
 services:
-  conjur:
+  conjur_5:
     image: cyberark/conjur:0.3.0-stable
     command: server -a default
     environment:
@@ -15,11 +15,23 @@ services:
   pg:
     image: postgres:9.3
 
+  conjur_4:
+    image: registry2.itci.conjur.net/conjur-appliance-cuke-master:4.9-stable
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      CONJUR_AUTHN_LOGIN: admin
+      CONJUR_AUTHN_API_KEY: secret
+    volumes:
+      - ./policy/:/etc/policy/:ro
+    ports:
+      - 8443:443
+
   client:
     image: conjurinc/cli5
-    depends_on: [ conjur ]
+    depends_on: [ conjur_5 ]
     environment:
-      CONJUR_APPLIANCE_URL: http://conjur
+      CONJUR_APPLIANCE_URL: http://conjur_5
       CONJUR_ACCOUNT: default
       CONJUR_AUTHN_API_KEY:
       CONJUR_AUTHN_LOGIN: admin
