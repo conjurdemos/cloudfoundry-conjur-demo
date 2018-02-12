@@ -13,15 +13,28 @@ pushd conjur-service-broker
 popd
 rm -rf conjur-service-broker*
 
-api_key=$(docker-compose exec -T conjur bash -c 'rails r "puts Role[%Q{default:user:admin}].api_key" 2>/dev/null')
+# get pcf-admin API key
+if "$CONJUR_VERSION" -eq "5"
+then
+  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:user:pcf-admin}].api_key" 2>/dev/null')
+  app_url="http://host.pcfdev.io"
+  account="default"
+  ssl_cert=""
+else
+  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['pcf-admin'].api_key\" 2>/dev/null")
+  app_url="https://host.pcfdev.io:8443/api"
+  account="cucumber"
+  ssl_cert=
+fi
 
 # configuring the SB env
 cf set-env conjur-service-broker SECURITY_USER_NAME TEMPORARY
 cf set-env conjur-service-broker SECURITY_USER_PASSWORD TEMPORARY
-cf set-env conjur-service-broker CONJUR_ACCOUNT default
-cf set-env conjur-service-broker CONJUR_APPLIANCE_URL http://host.pcfdev.io
-cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN admin
+cf set-env conjur-service-broker CONJUR_ACCOUNT "$account"
+cf set-env conjur-service-broker CONJUR_APPLIANCE_URL "$app_url"
+cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN pcf-admin
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$api_key"
+cf set-env conjur-service-broker CONJUR_VERSION "$CONJUR_VERSION"
 
 # start the SB app
 cf start conjur-service-broker

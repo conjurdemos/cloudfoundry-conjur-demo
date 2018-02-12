@@ -3,7 +3,28 @@
 # stop will check the dir, make sure PCFDev is running and the `cf` binary is installed
 ./bin/stop
 
-docker-compose up -d pg conjur
+if "$CONJUR_VERSION" -eq "5"
+then
+  docker-compose up -d pg conjur_5
+
+  # wait for Conjur to be ready
+  docker-compose exec -T conjur_5 conjurctl wait -r 30 -p 80
+else
+  docker-compose up -d conjur_4
+
+  # configure Conjur
+  docker-compose exec -T \
+    -e CONJUR_AUTHN_LOGIN=admin \
+    -e CONJUR_AUTHN_API_KEY=secret \
+    conjur_4 bash -c "
+      /opt/conjur/evoke/bin/wait_for_conjur
+      evoke ca regenerate conjur_4
+      evoke ca regenerate host.pcfdev.io
+      /opt/conjur/evoke/bin/wait_for_conjur
+    "
+
+    docker cp $(docker-compose ps -q conjur_4):/opt/conjur/etc/ssl/ca.pem ./tmp/conjur.pem
+fi
 
 cf create-org cyberark
 cf target -o cyberark

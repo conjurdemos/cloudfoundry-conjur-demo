@@ -1,0 +1,21 @@
+- !user
+  id: pcf-admin
+
+- !group
+  id: pcf-admin-group
+
+- !grant
+  role: !group pcf-admin-group
+  member: !user pcf-admin
+
+- !policy
+  id: pcf
+  owner: !group pcf-admin-group
+  body:
+   - !layer pcf-apps
+
+   - !host-factory
+     id: pcf-apps
+     layers: [ !layer pcf-apps ]
+
+   - !include app.yml
