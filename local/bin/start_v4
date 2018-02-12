@@ -1,0 +1,93 @@
+#!/bin/bash -e
+BIN_DIR=$(cd "$(dirname $0)/."  && pwd)
+ROOT_DIR=$BIN_DIR/../
+APP_NAME="hello-world"
+
+# stop will check the dir, make sure PCFDev is running and the `cf` binary is installed
+./bin/stop
+
+docker-compose up -d conjur_4
+./configure_v4.sh
+API_KEY=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['admin'].api_key\" 2>/dev/null")
+
+cf create-space cyberark-conjur-demo
+cf target -s cyberark-conjur-demo
+
+git clone git@github.com:cf-platform-eng/meta-buildpack.git
+pushd meta-buildpack
+  ./build
+  ./upload
+popd
+rm -rf meta-buildpack
+
+pushd cloudfoundry-conjur-buildpack
+  ./upload.sh
+popd
+
+pushd ../../conjur-service-broker
+  cf push --no-start --random-route
+
+  cf set-env conjur-service-broker SECURITY_USER_NAME TEMPORARY
+  cf set-env conjur-service-broker SECURITY_USER_PASSWORD TEMPORARY
+  cf set-env conjur-service-broker CONJUR_ACCOUNT cucumber
+  cf set-env conjur-service-broker CONJUR_APPLIANCE_URL https://host.pcfdev.io/api
+  cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN admin
+  cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$API_KEY"
+  cf set-env conjur-service-broker CONJUR_VERSION 4
+  cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE ./tmp/conjur.pem
+
+  cf start conjur-service-broker
+
+  APP_URL="http://`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`"
+  cf create-service-broker conjur-service-broker "TEMPORARY" "TEMPORARY" $APP_URL --space-scoped
+
+  printf "Waiting for Conjur to be ready... "
+  while [[ ! $(curl -o /dev/null -s -w '%{http_code}\n' localhost:3000) == 200 ]]
+  do
+    echo "."
+    sleep 1
+  done
+  echo "Done."
+
+  cf create-service cyberark-conjur community conjur
+popd
+
+# load policy
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" \
+  --entrypoint bash client -c "
+    conjur policy load --replace root /policy/root.yml
+    conjur variable values add app/database/username 'a database username'
+    conjur variable values add app/database/password 'a database password'
+    conjur variable values add app/stripe/private_key 'a stripe private_key'
+  "
+
+pushd ../app
+  cf push --no-start
+
+  # Bind done automatically during cf push due to app's manifest.yml file
+  # cf bind-service $APP_NAME conjur
+popd
+
+# add entitlements
+APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g')
+docker-compose run --rm \
+  -e CONJUR_AUTHN_API_KEY="$(cat $ROOT_DIR/tmp/api_key)" \
+  --entrypoint bash client -c "
+    cat /policy/entitlements.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load root -
+  "
+
+pushd ../app
+  cf start $APP_NAME
+popd
+
+echo -e "\n\nA demo space was created in the PCF deploy.\n"
+echo -e "The buildpacks were uploaded to PCF.\n"
+echo -e "The service broker was uploaded and installed.\n"
+echo -e "The root Conjur policy was loaded:"
+echo -e "Set db username to 'a database username'"
+echo -e "Set db password to 'a database password'"
+echo -e "Set stripe private key to 'a stripe private_key'\n"
+echo -e "The demo '$APP_NAME' app was pushed to PCF.\n"
+echo -e "Updated policy grants to grant host access to secrets\n"
+echo -e "The demo '$APP_NAME' app was deployed to $(cf app $APP_NAME | grep routes | awk '{print $NF}')\n"

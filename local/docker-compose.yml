@@ -37,3 +37,13 @@ services:
       CONJUR_AUTHN_LOGIN: admin
     volumes:
       - ./policy:/policy
+
+  conjur_4:
+    image: registry2.itci.conjur.net/conjur-appliance-cuke-master:4.9-stable
+    security_opt:
+      - seccomp:unconfined
+    volumes:
+    - ./policy.yml:/etc/policy.yml:ro
+
+networks:
+  default:
