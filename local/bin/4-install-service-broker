@@ -24,7 +24,7 @@ else
   api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['pcf-admin'].api_key\" 2>/dev/null")
   app_url="https://host.pcfdev.io:8443/api"
   account="cucumber"
-  ssl_cert=
+  ssl_cert="$(cat tmp/conjur.pem )"
 fi
 
 # configuring the SB env
@@ -35,6 +35,8 @@ cf set-env conjur-service-broker CONJUR_APPLIANCE_URL "$app_url"
 cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN pcf-admin
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$api_key"
 cf set-env conjur-service-broker CONJUR_VERSION "$CONJUR_VERSION"
+cf set-env conjur-service-broker CONJUR_POLICY pcf
+cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "$ssl_cert"
 
 # start the SB app
 cf start conjur-service-broker
