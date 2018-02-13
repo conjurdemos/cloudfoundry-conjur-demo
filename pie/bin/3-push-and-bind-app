@@ -7,7 +7,7 @@ cf create-service cyberark-conjur community conjur
 
 # push the app without starting it
 pushd ../app
-  cf push --no-start
+  cf push --no-start --random-route
 
   # Bind done automatically during cf push due to app's manifest.yml file
   # cf bind-service $APP_NAME conjur

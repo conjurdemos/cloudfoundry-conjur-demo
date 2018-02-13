@@ -2,9 +2,9 @@
 APP_NAME="hello-world"
 
 ./bin/0-check-dependencies
-./bin/1-start-conjur-and-prep-space
+./bin/1-prep-space
 ./bin/2-load-secrets-into-conjur
 ./bin/3-push-and-bind-app
-./bin/4-privilege-app
-./bin/5-start-app
-./bin/6-print-summary
+#./bin/4-privilege-app
+#./bin/5-start-app
+#./bin/6-print-summary
