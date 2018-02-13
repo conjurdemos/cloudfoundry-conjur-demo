@@ -19,5 +19,5 @@ then
     '
 else
   replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
-  cat /etc/policy/pcf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group pcf-admin-group
+  cat /policy/pcf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group pcf-admin-group
 fi
