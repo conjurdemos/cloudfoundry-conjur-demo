@@ -19,6 +19,12 @@ then
   fatal "You must set the CONJUR_VERSION environment variable to 4 or 5 before running the demo."
 fi
 
+cli_major_version=$(conjur -v | awk '{print $NF}' | cut -d . -f 1)
+if [[ "$CONJUR_VERSION" -eq "4" ]] && [[ "$cli_major_version" -ne "5" ]]
+then
+  fatal "You must install conjur-cli v5 to run the v4 demo"
+fi
+
 if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
   then
     fatal "Your Conjur API Key and/or Account are missing from the environment."

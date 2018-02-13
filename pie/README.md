@@ -13,6 +13,15 @@ $ security add-generic-password -s "summon" -a "conjur_pie/account" -w "ACCOUNTI
 $ security add-generic-password -s "summon" -a "conjur_pie/api_key" -w "APIKEY"
 ```
 
+### Additional steps for v4
+
+Install version 5.x.x of the Conjur CLI and connect to our hosted Conjur v4 instance by running:
+
+```
+conjur init -h https://conjur-pcf.itci.conjur.net -f ~/.conjurrc.pie
+export CONJURRC=~/.conjurrc.pie
+```
+
 **WARNING:** Running the demo scripts will:
 - Add and remove spaces named `cyberark-conjur-demo` from your deployment, so make sure you choose an org that does not have an existing `demo` space.
 - Replace the `root` policy in your Conjur account

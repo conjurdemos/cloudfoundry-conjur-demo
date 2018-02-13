@@ -1,0 +1,7 @@
+#!/bin/bash -e
+
+# stop will make sure PCFDev is running and the `cf` binary is installed
+./bin/stop
+
+cf create-space cyberark-conjur-demo
+cf target -s cyberark-conjur-demo
