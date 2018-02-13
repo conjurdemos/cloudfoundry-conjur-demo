@@ -5,12 +5,23 @@ fatal () {
   exit 1
 }
 
+[[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH - read the README!"
+[[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
+
+cur_dir=$(basename $(pwd))
+if [[ "$cur_dir" != "pie" ]]
+then
+  fatal "Please cd to the pie directory to run this demo."
+fi
+
+if [[ -z "$CONJUR_VERSION" ]] || [[ "$CONJUR_VERSION" -ne "5" && "$CONJUR_VERSION" -ne "4" ]]
+then
+  fatal "You must set the CONJUR_VERSION environment variable to 4 or 5 before running the demo."
+fi
+
 if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
   then
     fatal "Your Conjur API Key and/or Account are missing from the environment."
 fi
-
-[[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH - read the README!"
-[[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
 
 echo "You are ready to run the demo."
