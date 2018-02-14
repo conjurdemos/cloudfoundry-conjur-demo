@@ -1,4 +1,5 @@
 #!/bin/bash -e
+
 APP_NAME="hello-world"
 
 pushd ../app

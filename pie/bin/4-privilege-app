@@ -1,12 +1,11 @@
 #!/bin/bash -e
-APP_NAME="hello-world"
 
-# load the base policy
+APP_NAME="hello-world"
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\/pcf\///g; s/"//g; s/,$//g')
 
+# add an entitlement for the new host
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
-  # add an entitlement for the new host
   docker run -d -it -v $PWD:/work -w /work \
     -e CONJUR_AUTHN_API_KEY="$API_KEY" \
     -e CONJUR_AUTHN_LOGIN="admin" \
