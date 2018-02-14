@@ -1,0 +1,48 @@
+#!/bin/bash -e
+
+fatal () {
+  echo ""
+  echo "$@" >&2
+  exit 1
+}
+
+[[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH - read the README!"
+[[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
+
+cur_dir=$(basename $(pwd))
+if [[ "$cur_dir" != "pie" ]]
+then
+  fatal "Please cd to the pie directory to run this demo."
+fi
+
+if [[ -z "$CONJUR_VERSION" ]] || [[ "$CONJUR_VERSION" -ne "5" && "$CONJUR_VERSION" -ne "4" ]]
+then
+  fatal "You must set the CONJUR_VERSION environment variable to 4 or 5 before running the demo."
+fi
+
+cli_major_version=$(conjur -v | awk '{print $NF}' | cut -d . -f 1)
+if [[ "$CONJUR_VERSION" -eq "4" ]] && [[ "$cli_major_version" -ne "5" ]]
+then
+  fatal "You must install conjur-cli v5 to run the v4 demo"
+fi
+
+cf target -o cyberark-conjur-org -s cyberark-conjur-space
+sb_name=$(cf apps | grep conjur-service-broker | awk '{print $1;}')
+version=$(cf env $sb_name | grep CONJUR_VERSION | awk '{print $2;}')
+
+if [[ "$CONJUR_VERSION" -ne "$version" ]]
+then
+  fatal "The value of your CONJUR_VERSION environment variable does not match the version of the Service Broker in your current PIE. Please log in to the correct PIE and try again."
+fi
+
+if [[ "$CONJUR_VERSION" -eq "4" ]] && [[ -z "$CONJURRC" ]]
+then
+  fatal "Your CONJURRC is not set - please set it to point to the correct Conjur configuration."
+fi
+
+if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
+then
+  fatal "Your Conjur API Key and/or Account are missing from the environment."
+fi
+
+echo "You are ready to run the demo."

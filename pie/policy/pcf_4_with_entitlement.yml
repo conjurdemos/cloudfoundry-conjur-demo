@@ -1,0 +1,16 @@
+- !policy
+  id: pcf
+  owner: !group pcf-admin-group
+  body:
+   - !layer pcf-apps
+
+   - !host-factory
+     id: pcf-apps
+     layers: [ !layer pcf-apps ]
+
+   - !include app.yml
+
+   # Application layer has the secrets-users role
+   - !grant
+     role: !group app/secrets-users
+     member: !host <APP_HOST_NAME>
