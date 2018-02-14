@@ -6,12 +6,15 @@ To run this demo, you must be working from the `pie` directory.
 Before beginning the demo, you will need to:
 - Install the Conjur Service Tile for PCF in the Ops Manager. The Conjur Service Tile for PCF must be configured with credentials for a running Conjur instance. You can quickly get Conjur running by visiting [the hosted Conjur page](https://www.conjur.org/get-started/try-conjur.html) to sign up for a hosted Conjur instance. We will use this throughout the demo; keep your Account ID and API Key ready to use.
 - Log into your Cloud Foundry deployment via the command line using `cf login` and target the org where you would like to deploy this demo with `cf target`. You can verify that your installation of the Conjur Service Tile for PCF is functioning correctly by verifying that the `cyberark-conjur` service is available when you run `cf marketplace`.
-- Install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
+- If connecting to a v4 Conjur instance, install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
   - Store the Conjur Account ID and API Key in the OSX keychain by calling:
 ```
 $ security add-generic-password -s "summon" -a "conjur_pie/account" -w "ACCOUNTID"
 $ security add-generic-password -s "summon" -a "conjur_pie/api_key" -w "APIKEY"
 ```
+**WARNING:** Running the demo scripts will:
+- Add and remove spaces named `cyberark-conjur-demo` from your deployment, so make sure you choose an org that does not have an existing `demo` space.
+- Update the `root` policy in your Conjur account
 
 ### Additional steps for v4
 
@@ -20,11 +23,8 @@ Install version 5.x.x of the Conjur CLI and connect to our hosted Conjur v4 inst
 ```
 conjur init -h https://conjur-pcf.itci.conjur.net -f ~/.conjurrc.pie
 export CONJURRC=~/.conjurrc.pie
+conjur authn login
 ```
-
-**WARNING:** Running the demo scripts will:
-- Add and remove spaces named `cyberark-conjur-demo` from your deployment, so make sure you choose an org that does not have an existing `demo` space.
-- Replace the `root` policy in your Conjur account
 
 ## Running the demo
 Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling
