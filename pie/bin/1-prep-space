@@ -1,0 +1,6 @@
+#!/bin/bash -e
+
+./bin/stop
+
+cf create-space cyberark-conjur-demo
+cf target -s cyberark-conjur-demo
