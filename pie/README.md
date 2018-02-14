@@ -6,7 +6,7 @@ To run this demo, you must be working from the `pie` directory.
 Before beginning the demo, you will need to:
 - Install the Conjur Service Tile for PCF in the Ops Manager. The Conjur Service Tile for PCF must be configured with credentials for a running Conjur instance. You can quickly get Conjur running by visiting [the hosted Conjur page](https://www.conjur.org/get-started/try-conjur.html) to sign up for a hosted Conjur instance. We will use this throughout the demo; keep your Account ID and API Key ready to use.
 - Log into your Cloud Foundry deployment via the command line using `cf login` and target the org where you would like to deploy this demo with `cf target`. You can verify that your installation of the Conjur Service Tile for PCF is functioning correctly by verifying that the `cyberark-conjur` service is available when you run `cf marketplace`.
-- If connecting to a v4 Conjur instance, install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
+- If connecting to a v5 Conjur instance, install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
   - Store the Conjur Account ID and API Key in the OSX keychain by calling:
 ```
 $ security add-generic-password -s "summon" -a "conjur_pie/account" -w "ACCOUNTID"
