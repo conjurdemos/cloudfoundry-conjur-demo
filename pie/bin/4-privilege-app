@@ -2,7 +2,7 @@
 APP_NAME="hello-world"
 
 # load the base policy
-APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g')
+APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\/pcf\///g; s/"//g; s/,$//g')
 
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
@@ -15,7 +15,7 @@ then
     -e APP_HOST_NAME="$APP_HOST_NAME" \
     --entrypoint bash conjurinc/cli5 -c '
       replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
-      cat policy/entitlements.yml | sed -e "$replace" | conjur policy load root -
+      cat policy/entitlements.yml | sed -e "$replace" | conjur policy load pcf -
     '
 else
   replace="s|<APP_HOST_NAME>|$APP_HOST_NAME|";
