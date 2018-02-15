@@ -21,6 +21,7 @@ else
       /opt/conjur/evoke/bin/wait_for_conjur
     "
 
+    mkdir tmp
     docker cp $(docker-compose ps -q conjur_4):/opt/conjur/etc/ssl/ca.pem ./tmp/conjur.pem
 fi
 
