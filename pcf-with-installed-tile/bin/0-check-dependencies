@@ -10,9 +10,9 @@ fatal () {
 [[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
 
 cur_dir=$(basename $(pwd))
-if [[ "$cur_dir" != "pie" ]]
+if [[ "$cur_dir" != "pcf-with-installed-tile" ]]
 then
-  fatal "Please cd to the pie directory to run this demo."
+  fatal "Please cd to the pcf-with-installed-tile directory to run this demo."
 fi
 
 if [[ -z "$CONJUR_VERSION" ]] || [[ "$CONJUR_VERSION" -ne "5" && "$CONJUR_VERSION" -ne "4" ]]

@@ -6,6 +6,9 @@ deployed to its own org and space that is only accessible to admin CF users.
 
 In addition, throughout this demo we assume you are logged into PCF Dev as an admin user, which enables you to install the Service Broker / Buildpacks and upload the demo app. In practice, the Service Broker / Buildpacks will be installed by a CF admin user, but the applications will be deployed to CF by developer users.
 
+For more information about how the Service Broker and Buildpack should be used in
+practice, see the [Cloud Foundry integration tutorial](https://www.conjur.org/tutorials/integrations/cloud-foundry.html).
+
 ## Preparing to run the demo
 **YOU MUST HAVE [PCF DEV](https://pivotal.io/pcf-dev) INSTALLED** to run this demo.
 
