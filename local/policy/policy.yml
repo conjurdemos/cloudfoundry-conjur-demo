@@ -1,9 +1,11 @@
-- !user
-  id: pcf-admin
+- !host
+  id: pcf-service-broker
+  annotations:
+    platform: cloudfoundry
 
 - !group
   id: pcf-admin-group
 
 - !grant
   role: !group pcf-admin-group
-  member: !user pcf-admin
+  member: !host pcf-service-broker

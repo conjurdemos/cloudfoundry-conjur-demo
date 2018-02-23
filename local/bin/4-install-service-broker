@@ -16,23 +16,23 @@ rm -rf conjur-service-broker*
 # get pcf-admin API key
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:user:pcf-admin}].api_key" 2>/dev/null')
+  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:pcf-service-broker}].api_key" 2>/dev/null')
   app_url="http://host.pcfdev.io"
   account="default"
   ssl_cert=""
 else
-  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['pcf-admin'].api_key\" 2>/dev/null")
+  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/pcf-service-broker'].api_key\" 2>/dev/null")
   app_url="https://host.pcfdev.io:8443/api"
   account="cucumber"
   ssl_cert="$(cat tmp/conjur.pem )"
 fi
 
 # configuring the SB env
-cf set-env conjur-service-broker SECURITY_USER_NAME TEMPORARY
-cf set-env conjur-service-broker SECURITY_USER_PASSWORD TEMPORARY
+cf set-env conjur-service-broker SECURITY_USER_NAME TEMP_USER
+cf set-env conjur-service-broker SECURITY_USER_PASSWORD TEMP_PASS
 cf set-env conjur-service-broker CONJUR_ACCOUNT "$account"
 cf set-env conjur-service-broker CONJUR_APPLIANCE_URL "$app_url"
-cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN pcf-admin
+cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN "host/pcf-service-broker"
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$api_key"
 cf set-env conjur-service-broker CONJUR_VERSION "$CONJUR_VERSION"
 cf set-env conjur-service-broker CONJUR_POLICY pcf
@@ -43,7 +43,7 @@ cf start conjur-service-broker
 
 # create the SB
 APP_URL="http://`cf app conjur-service-broker | grep -E -w 'urls:|routes:' | awk '{print $2}'`"
-cf create-service-broker conjur-service-broker "TEMPORARY" "TEMPORARY" $APP_URL --space-scoped
+cf create-service-broker conjur-service-broker "TEMP_USER" "TEMP_PASS" $APP_URL
 
-# create the service instance
-cf create-service cyberark-conjur community conjur
+# make the service available in all orgs / spaces
+cf enable-service-access cyberark-conjur

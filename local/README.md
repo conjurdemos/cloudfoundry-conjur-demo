@@ -1,6 +1,11 @@
 # cloudfoundry-conjur-demo
 To run this demo, you must be working from the `local` directory.
 
+For simplicity, in this demo the Service Broker app is deployed to the same org / space as the demo application. In practice, the Service Broker app should be
+deployed to its own org and space that is only accessible to admin CF users.
+
+In addition, throughout this demo we assume you are logged into PCF Dev as an admin user, which enables you to install the Service Broker / Buildpacks and upload the demo app. In practice, the Service Broker / Buildpacks will be installed by a CF admin user, but the applications will be deployed to CF by developer users.
+
 ## Preparing to run the demo
 **YOU MUST HAVE [PCF DEV](https://pivotal.io/pcf-dev) INSTALLED** to run this demo.
 
