@@ -8,7 +8,7 @@ Conjur instance in a container, manually deploy the Conjur Service Broker to
 a locally running instance of [PCF Dev](https://pivotal.io/pcf-dev), and deploy
 the test [app](app/) to PCF to verify it can retrieve secrets from Conjur.
 
-- The [PIE](pie/) directory is for **Conjur engineers only**; it assumes that
+- The [PCF with installed tile](pcf-with-installed-tile/) directory is for **Conjur engineers only**; it assumes that
 you have access to a PCF installation and that you have an existing Conjur
 installation up and running. In particular, this demo was built to work with
 Pivotal's Integration Environment, or PIE - a hosted deployment of PCF available

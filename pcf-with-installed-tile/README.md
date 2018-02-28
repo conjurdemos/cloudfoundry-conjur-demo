@@ -1,6 +1,6 @@
 # cloudfoundry-conjur-demo
 
-To run this demo, you must be working from the `pie` directory.
+To run this demo, you must be working from the `pcf-with-installed-tile` directory.
 
 ## Steps to take before running demo
 Before beginning the demo, you will need to:

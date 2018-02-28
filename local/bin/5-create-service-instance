@@ -1,0 +1,8 @@
+#!/bin/bash -e
+
+# target the org and space where the demo app will be deployed
+# this org / space was created before
+cf target -o demo-org -s demo-space
+
+#create the service instance
+cf create-service cyberark-conjur community conjur

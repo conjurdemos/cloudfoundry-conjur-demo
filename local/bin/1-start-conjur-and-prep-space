@@ -21,10 +21,19 @@ else
       /opt/conjur/evoke/bin/wait_for_conjur
     "
 
-    mkdir tmp
+    mkdir tmp || true
     docker cp $(docker-compose ps -q conjur_4):/opt/conjur/etc/ssl/ca.pem ./tmp/conjur.pem
 fi
 
+# create an org and space for the deployed applications to live
+cf create-org demo-org
+cf target -o demo-org
+cf create-space demo-space
+
+# make the user a developer in the demo org / space
+cf set-space-role user cyberark-org demo-space SpaceDeveloper
+
+# create an org and space for the service broker to live
 cf create-org cyberark
 cf target -o cyberark
 cf create-space cyberark-conjur-demo

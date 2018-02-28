@@ -9,23 +9,23 @@ APP_HOST_NAME=$(echo $APP_HOST_NAME | sed 's/pcf\///g')
 
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:user:pcf-admin}].api_key" 2>/dev/null')
+  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:pcf-service-broker}].api_key" 2>/dev/null')
 
   # load an entitlement into the pcf policy
   docker-compose run --rm \
-    -e CONJUR_AUTHN_LOGIN=pcf-admin \
+    -e CONJUR_AUTHN_LOGIN="host/pcf-service-broker" \
     -e CONJUR_AUTHN_API_KEY="$api_key" \
     --entrypoint bash client -c "
       cat /policy/entitlements.yml | sed -e 's/<APP_HOST_NAME>/${APP_HOST_NAME}/' | conjur policy load pcf -
     "
 else
-  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['pcf-admin'].api_key\" 2>/dev/null")
+  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/pcf-service-broker'].api_key\" 2>/dev/null")
 
   # reload the PCF policy with the entitlement added
   docker-compose exec -T conjur_4 \
     env APP_HOST_NAME=$APP_HOST_NAME \
     env CONJUR_AUTHN_API_KEY=$api_key \
-    env CONJUR_AUTHN_LOGIN=pcf-admin \
+    env CONJUR_AUTHN_LOGIN="host/pcf-service-broker" \
     bash -c '
       replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
       cd /etc/policy/
