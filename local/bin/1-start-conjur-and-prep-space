@@ -31,7 +31,7 @@ cf target -o demo-org
 cf create-space demo-space
 
 # make the user a developer in the demo org / space
-cf set-space-role user cyberark-org demo-space SpaceDeveloper
+cf set-space-role user demo-org demo-space SpaceDeveloper
 
 # create an org and space for the service broker to live
 cf create-org cyberark
