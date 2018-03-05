@@ -5,7 +5,7 @@ cf delete-service conjur -f || true
 cf delete-service-broker conjur-service-broker -f || true
 cf delete conjur-service-broker -f || true
 cf delete-buildpack meta_buildpack -f || true
-cf delete-buildpack cloudfoundry_conjur_buildpack -f || true
+cf delete-buildpack conjur_buildpack -f || true
 cf delete-space cyberark-conjur-demo -f || true
 cf delete-org cyberark -f || true
 
