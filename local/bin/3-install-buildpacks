@@ -13,12 +13,10 @@ popd
 rm -rf meta-buildpack*
 
 # get the Conjur buildpack and upload to cf
-curl -L $(curl -s https://api.github.com/repos/cyberark/cloudfoundry-conjur-buildpack/releases/latest | grep zipball_url | awk '{print $NF}' | sed 's/",*//g') > cloudfoundry-conjur-buildpack.zip
-unzip cloudfoundry-conjur-buildpack.zip
-repo_dir=$(ls | grep cyberark-cloudfoundry-conjur-buildpack)
-mv $repo_dir cloudfoundry-conjur-buildpack
-
-pushd cloudfoundry-conjur-buildpack
+mkdir conjur-buildpack
+pushd conjur-buildpack
+  curl -L $(curl -s https://api.github.com/repos/cyberark/cloudfoundry-conjur-buildpack/releases/latest | grep browser_download_url | grep zip | awk '{print $NF}' | sed 's/",*//g') > conjur-buildpack.zip
+  unzip conjur-buildpack.zip
   ./upload.sh
 popd
-rm -rf cloudfoundry-conjur-buildpack*
+rm -rf conjur-buildpack
