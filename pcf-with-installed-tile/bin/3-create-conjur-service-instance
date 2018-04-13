@@ -1,0 +1,3 @@
+#!/bin/bash -e
+
+cf create-service cyberark-conjur community conjur
