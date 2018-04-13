@@ -1,9 +1,5 @@
 #!/bin/bash -e
 
-APP_NAME="hello-world"
-
-cf create-service cyberark-conjur community conjur
-
 pushd ../app
   cf push --no-start --random-route
 

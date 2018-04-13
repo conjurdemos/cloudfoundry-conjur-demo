@@ -2,5 +2,6 @@
 
 ./bin/stop
 
-cf create-space cyberark-conjur-demo
-cf target -s cyberark-conjur-demo
+cf target -o cyberark-demo
+cf create-space cyberark-demo-space
+cf target -s cyberark-demo-space

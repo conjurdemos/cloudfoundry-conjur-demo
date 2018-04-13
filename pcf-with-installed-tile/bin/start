@@ -4,7 +4,8 @@ APP_NAME="hello-world"
 ./bin/0-check-dependencies
 ./bin/1-prep-space
 ./bin/2-load-secrets-into-conjur
-./bin/3-push-and-bind-app
-./bin/4-privilege-app
-./bin/5-start-app
-./bin/6-print-summary
+./bin/3-create-conjur-service-instance
+./bin/4-push-and-bind-app
+./bin/5-privilege-app
+./bin/6-start-app
+./bin/7-print-summary
