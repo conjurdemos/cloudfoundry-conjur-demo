@@ -7,7 +7,6 @@ fatal () {
 }
 
 [[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH - read the README!"
-[[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
 
 cur_dir=$(basename $(pwd))
 if [[ "$cur_dir" != "pcf-with-installed-tile" ]]
