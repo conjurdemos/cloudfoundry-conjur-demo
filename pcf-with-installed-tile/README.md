@@ -35,8 +35,7 @@ conjur authn login
 Authenticate as the `admin` user for the Conjur instance (or another user who has authority to modify `root` policy) - this demo will need to update `root` policy to add the `pcf` policy namespace and the `pcf-admin` user / group.
 
 ## Running the demo
-Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling
-`summon -p keyring.py ./bin/start`.
+Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling `./bin/start` (for v4) or `summon -p keyring.py ./bin/start` (for v5).
 
 ### What the script does
 The start-up script clears out your workspace - it deletes any previously deployed `hello-world` apps in the demo space, removes the Conjur service, and removes the demo space.
