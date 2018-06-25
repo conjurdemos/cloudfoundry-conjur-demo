@@ -1,5 +1,7 @@
 - !host
   id: pcf-service-broker
+  annotations:
+    platform: cloudfoundry
 
 - !group
   id: pcf-admin-group
@@ -7,3 +9,9 @@
 - !grant
   role: !group pcf-admin-group
   member: !host pcf-service-broker
+
+# Give the host read permissions on itself, to allow viewing annotations
+- !permit
+  role: !host pcf-service-broker
+  privilege: read
+  resource: !host pcf-service-broker
