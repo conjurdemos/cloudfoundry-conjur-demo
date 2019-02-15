@@ -2,7 +2,7 @@ version: "2"
 
 services:
   conjur_5:
-    image: cyberark/conjur:0.3.0-stable
+    image: cyberark/conjur
     command: server -a default
     environment:
       DATABASE_URL: postgres://postgres@pg/postgres
@@ -13,7 +13,7 @@ services:
       - pg
 
   pg:
-    image: postgres:9.3
+    image: postgres:9.4
 
   conjur_4:
     image: registry2.itci.conjur.net/conjur-appliance-cuke-master:4.9-stable
@@ -28,7 +28,7 @@ services:
       - 8443:443
 
   client:
-    image: conjurinc/cli5
+    image: cyberark/conjur-cli:5
     depends_on: [ conjur_5 ]
     environment:
       CONJUR_APPLIANCE_URL: http://conjur_5
