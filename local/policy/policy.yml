@@ -3,6 +3,11 @@
   annotations:
     platform: cloudfoundry
 
+- !permit
+  role: !host pcf-service-broker
+  privilege: read
+  resource: !host pcf-service-broker
+
 - !group
   id: pcf-admin-group
 
