@@ -6,10 +6,10 @@ fatal () {
 }
 
 [[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH - read the README!"
-[[ `cf dev status | head -n1` -eq 'Running' ]] || cf dev start
+cf dev start
 
 cf_api=$(cf target | grep "api endpoint" | awk '{print $NF}')
-if [[ "$cf_api" != "https://api.local.pcfdev.io" ]]
+if [[  "$cf_api" != "https://api.dev.cfdev.sh" ]]
 then
   fatal "You are not logged in to PCF Dev."
 fi

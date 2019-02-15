@@ -17,7 +17,7 @@ rm -rf conjur-service-broker*
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
   api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:pcf-service-broker}].api_key" 2>/dev/null')
-  app_url="http://host.pcfdev.io"
+  app_url="http://host.cfdev.sh"
   account="default"
   ssl_cert=""
 else
