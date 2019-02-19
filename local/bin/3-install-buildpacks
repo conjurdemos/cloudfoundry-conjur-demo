@@ -1,17 +1,5 @@
 #!/bin/bash -e
 
-# get the meta-buildpack and upload to cf
-curl -L $(curl -s https://api.github.com/repos/cf-platform-eng/meta-buildpack/releases/latest | grep zipball_url | awk '{print $NF}' | sed 's/",*//g') > meta-buildpack.zip
-unzip meta-buildpack.zip
-repo_dir=$(ls | grep cf-platform-eng-meta-buildpack)
-mv $repo_dir meta-buildpack
-
-pushd meta-buildpack
-  ./build
-  ./upload
-popd
-rm -rf meta-buildpack*
-
 # get the Conjur buildpack and upload to cf
 mkdir conjur-buildpack
 pushd conjur-buildpack
