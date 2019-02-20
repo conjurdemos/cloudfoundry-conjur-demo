@@ -18,12 +18,21 @@ If you have not worked with PCF Dev before, it is a great idea to work through [
 
 Once you have PCF Dev installed, running, and logged in, you can run through this demo.
 
+> We tested this demo to run with the CF Dev version described as:
+>
+> ```sh-session
+> $ cf dev version
+> CLI: 0.0.12
+> cf: v5.3.0
+> cf-mysql: 36.15.0
+> ```
+
 ## Running the demo
 This demo will work with either v4 or v5 Conjur. Before starting, set your `CONJUR_VERSION` environment variable to the version you would like to demo (either 4 or 5).
 
 To run the demo, you can step through the scripts in [./bin/](bin/) one by one in order, or you can run [./bin/start](bin/start) to run the suite.
 
-Visit `http://hello-world.local.pcfdev.io` and observe the running app displaying secrets retrieved from Conjur by the build-pack, with machine identity provided via the service broker.
+Visit `http://hello-world.dev.cfdev.sh` and observe the running app displaying secrets retrieved from Conjur by the build-pack, with machine identity provided via the service broker.
 
 ## Verifying functionality
 To verify that the service is in fact retrieving the actual secrets from Conjur, you can rotate the secrets and then restage the app, and it will display the new secret values that you set. We have included a [script](bin/rotate) for your convenience that will allow you to do that. To use it, run `./bin/rotate`.
