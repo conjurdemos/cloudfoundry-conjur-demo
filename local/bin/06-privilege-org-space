@@ -1,0 +1,30 @@
+#!/bin/bash -e
+ORG_NAME="demo-org"
+SPACE_NAME="demo-space"
+
+ORG_GUID=$(cf org --guid "$ORG_NAME")
+SPACE_GUID=$(cf space --guid "$SPACE_NAME")
+
+ORG_LAYER_NAME="$ORG_GUID"
+SPACE_LAYER_NAME="$ORG_GUID/$SPACE_GUID"
+
+echo "Organization layer in Conjur is: $ORG_LAYER_NAME"
+echo "Space layer in Conjur is: $SPACE_LAYER_NAME"
+
+if [[ "$CONJUR_VERSION" -eq "5" ]]
+then
+  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:pcf-service-broker}].api_key" 2>/dev/null')
+
+  # load an entitlement into the pcf policy
+  docker-compose run --rm \
+    -e CONJUR_AUTHN_LOGIN="host/pcf-service-broker" \
+    -e CONJUR_AUTHN_API_KEY="$api_key" \
+    --entrypoint bash client -c "
+      echo 'Entitling org...'
+      cat /policy/org-entitlements.yml | sed -e 's/<ORG_LAYER_NAME>/${ORG_LAYER_NAME}/' | conjur policy load pcf -
+      echo 'Entitling space...'
+      cat /policy/space-entitlements.yml | sed -e 's~<SPACE_LAYER_NAME>~${SPACE_LAYER_NAME}~' | conjur policy load pcf -
+   "
+else
+  echo "Organization and space entitlements are only available with Conjur 5"
+fi
