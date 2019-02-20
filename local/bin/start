@@ -1,12 +1,13 @@
 #!/bin/bash -e
 
-./bin/0-check-dependencies
-./bin/1-start-conjur-and-prep-space
-./bin/2-load-secrets-into-conjur
-./bin/3-install-buildpacks
-./bin/4-install-service-broker
-./bin/5-create-service-instance
-./bin/6-push-and-bind-app
-./bin/7-privilege-app
-./bin/8-start-app
-./bin/9-print-summary
+./bin/00-check-dependencies
+./bin/01-start-conjur-and-prep-space
+./bin/02-load-secrets-into-conjur
+./bin/03-install-buildpack
+./bin/04-install-service-broker
+./bin/05-create-service-instance
+./bin/06-privilege-org-space
+./bin/07-push-and-bind-app
+./bin/08-privilege-app
+./bin/09-start-app
+./bin/10-print-summary
