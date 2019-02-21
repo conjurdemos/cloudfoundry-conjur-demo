@@ -17,7 +17,7 @@ else
     conjur_4 bash -c "
       /opt/conjur/evoke/bin/wait_for_conjur
       evoke ca regenerate conjur_4
-      evoke ca regenerate host.pcfdev.io
+      evoke ca regenerate host.cfdev.sh
       /opt/conjur/evoke/bin/wait_for_conjur
     "
 
