@@ -22,9 +22,9 @@ then
   ssl_cert=""
 else
   api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/pcf-service-broker'].api_key\" 2>/dev/null")
-  app_url="https://host.pcfdev.io:8443/api"
+  app_url="https://host.cfdev.sh:8443/api"
   account="cucumber"
-  ssl_cert="$(cat tmp/conjur.pem )"
+  ssl_cert="$(cat tmp/conjur.pem)"
 fi
 
 # configuring the SB env
