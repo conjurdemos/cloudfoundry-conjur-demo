@@ -1,22 +1,26 @@
 # cloudfoundry-conjur-demo
 To run this demo, you must be working from the `local` directory.
 
-For simplicity, in this demo the Service Broker app is deployed to the same org / space as the demo application. In practice, the Service Broker app should be
+For simplicity, in this demo the Service Broker app is deployed to the same
+org / space as the demo application. In practice, the Service Broker app should be
 deployed to its own org and space that is only accessible to admin CF users.
 
-In addition, throughout this demo we assume you are logged into PCF Dev as an admin user, which enables you to install the Service Broker / Buildpacks and upload the demo app. In practice, the Service Broker / Buildpacks will be installed by a CF admin user, but the applications will be deployed to CF by developer users.
+In addition, throughout this demo we assume you are logged into CF Dev as an admin user,
+which enables you to install the Service Broker / Buildpacks and upload the demo app.
+In practice, the Service Broker / Buildpacks will be installed by a CF admin user,
+but the applications will be deployed to CF by developer users.
 
-If you want to test this workflow out, the demo is set up so that the PCF Dev user `user` has Developer access to the `demo-org` org and `demo-space` space where the app will be deployed. To demonstrate this workflow, you can run scripts 0-4 as the PCF Dev `admin` user, and log in as the PCF Dev non-admin `user` user to run the remaining scripts.
+If you want to test this workflow out, the demo is set up so that the CF Dev
+user `user` has Developer access to the `demo-org` org and `demo-space` space
+where the app will be deployed. To demonstrate this workflow, you can run
+scripts 0-4 as the CF Dev `admin` user, and log in as the CF Dev non-admin `user`
+user to run the remaining scripts.
 
 For more information about how the Service Broker and Buildpack should be used in
 practice, see the [Cloud Foundry integration tutorial](https://www.conjur.org/tutorials/integrations/cloud-foundry.html).
 
 ## Preparing to run the demo
-**YOU MUST HAVE [PCF DEV](https://pivotal.io/pcf-dev) INSTALLED** to run this demo.
-
-If you have not worked with PCF Dev before, it is a great idea to work through [Pivotal's introduction](https://pivotal.io/platform/pcf-tutorials/getting-started-with-pivotal-cloud-foundry-dev/introduction), which will help you install PCF Dev, the CF CLI, and deploy a sample app.
-
-Once you have PCF Dev installed, running, and logged in, you can run through this demo.
+**YOU MUST HAVE [CF DEV](https://github.com/cloudfoundry-incubator/cfdev) INSTALLED** to run this demo.
 
 > We tested this demo to run with the CF Dev version described as:
 >

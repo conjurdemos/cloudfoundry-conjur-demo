@@ -11,7 +11,7 @@ cf dev start
 cf_api=$(cf target | grep "api endpoint" | awk '{print $NF}')
 if [[  "$cf_api" != "https://api.dev.cfdev.sh" ]]
 then
-  fatal "You are not logged in to PCF Dev."
+  fatal "You are not logged in to CF Dev."
 fi
 
 cur_dir=$(basename $(pwd))
