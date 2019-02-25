@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# stop will check the dir, make sure PCFDev is running and the `cf` binary is installed
+# stop will check the dir, make sure CF Dev is running and the `cf` binary is installed
 ./bin/stop
 
 if [[ "$CONJUR_VERSION" -eq "5" ]]

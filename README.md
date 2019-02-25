@@ -5,7 +5,7 @@ instance.
 
 - The [local](local/) directory includes a script that will stand up a local
 Conjur instance in a container, manually deploy the Conjur Service Broker to
-a locally running instance of [PCF Dev](https://pivotal.io/pcf-dev), and deploy
+a locally running instance of [CF Dev](https://github.com/cloudfoundry-incubator/cfdev), and deploy
 the test [app](app/) to PCF to verify it can retrieve secrets from Conjur.
 
 - The [PCF with installed tile](pcf-with-installed-tile/) directory is for **Conjur engineers only**; it assumes that
