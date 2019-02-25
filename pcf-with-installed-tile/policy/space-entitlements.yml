@@ -1,0 +1,3 @@
+- !grant
+  role: !group space/secrets-users
+  member: !layer <SPACE_LAYER_NAME>

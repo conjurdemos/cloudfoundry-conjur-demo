@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash -eu
 
 APP_NAME="hello-world"
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\/pcf\///g; s/"//g; s/,$//g')
@@ -13,8 +13,8 @@ then
     -e CONJUR_APPLIANCE_URL="eval.conjur.org" \
     -e APP_HOST_NAME="$APP_HOST_NAME" \
     --entrypoint bash conjurinc/cli5 -c '
-      replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
-      cat policy/entitlements.yml | sed -e "$replace" | conjur policy load pcf -
+      replace="s~<APP_HOST_NAME>~$APP_HOST_NAME~";
+      cat policy/app-entitlements.yml | sed -e "$replace" | conjur policy load pcf -
     '
 else
   replace="s|<APP_HOST_NAME>|$APP_HOST_NAME|";
