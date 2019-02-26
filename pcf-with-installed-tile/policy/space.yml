@@ -1,5 +1,3 @@
-# Top-level policy file
-
 - !policy
   id: space
   body:
