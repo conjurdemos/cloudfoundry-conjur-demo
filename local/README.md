@@ -22,17 +22,17 @@ practice, see the [Cloud Foundry integration tutorial](https://www.conjur.org/tu
 ## Preparing to run the demo
 **YOU MUST HAVE [CF DEV](https://github.com/cloudfoundry-incubator/cfdev) INSTALLED** to run this demo.
 
-> We tested this demo to run with the CF Dev version described as:
->
-> ```sh-session
-> $ cf dev version
-> CLI: 0.0.12
-> cf: v5.3.0
-> cf-mysql: 36.15.0
-> ```
+> We tested this demo to run with the [CF Dev 0.0.12](https://github.com/cloudfoundry-incubator/cfdev/releases/tag/v0.0.12)
 
 ## Running the demo
-This demo will work with either v4 or v5 Conjur. Before starting, set your `CONJUR_VERSION` environment variable to the version you would like to demo (either 4 or 5).
+This demo will work with either v4 or v5 Conjur. Before starting:
+* Set your `CONJUR_VERSION` environment variable to the version you would like to demo (either 4 or 5).
+
+* Ensure that your CloudFoundry CLI (`cf`) is targeting your CF Dev instance. Instructions for this can be found at
+  https://github.com/cloudfoundry-incubator/cfdev. For CF Dev `v0.0.12` this can be accomplished by running:
+  ```
+  cf login -a https://api.dev.cfdev.sh --skip-ssl-validation
+  ```
 
 To run the demo, you can step through the scripts in [./bin/](bin/) one by one in order, or you can run [./bin/start](bin/start) to run the suite.
 
