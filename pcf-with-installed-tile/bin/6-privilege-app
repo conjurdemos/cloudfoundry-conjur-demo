@@ -1,7 +1,7 @@
 #!/bin/bash -eu
 
 APP_NAME="hello-world"
-APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\/pcf\///g; s/"//g; s/,$//g')
+APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\/cf\///g; s/"//g; s/,$//g')
 
 # add an entitlement for the new host
 if [[ "$CONJUR_VERSION" -eq "5" ]]
@@ -14,11 +14,11 @@ then
     -e APP_HOST_NAME="$APP_HOST_NAME" \
     --entrypoint bash conjurinc/cli5 -c '
       replace="s~<APP_HOST_NAME>~$APP_HOST_NAME~";
-      cat policy/app-entitlements.yml | sed -e "$replace" | conjur policy load pcf -
+      cat policy/app-entitlements.yml | sed -e "$replace" | conjur policy load cf -
     '
 else
   replace="s|<APP_HOST_NAME>|$APP_HOST_NAME|";
   pushd policy
-    cat ./pcf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group pcf-admin-group
+    cat ./cf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group cf-admin-group
   popd
 fi

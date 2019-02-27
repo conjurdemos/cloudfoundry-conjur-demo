@@ -1,34 +1,34 @@
 #!/bin/bash -e
 APP_NAME="hello-world"
 
-# get the host name "pcf/BINDING_ID", and then remove the pcf policy prefix
-# when we load the entitlement directly into the pcf policy,
-# the pcf policy prefix is redundant
+# get the host id, and then remove the cf policy prefix
+# when we load the entitlement directly into the cf policy,
+# the cf policy prefix is redundant
 APP_HOST_NAME=$(cf env $APP_NAME | grep authn_login | awk '{print $NF}' | sed 's/host\///g; s/"//g; s/,$//g')
-APP_HOST_NAME=$(echo $APP_HOST_NAME | sed 's/pcf\///g')
+APP_HOST_NAME=$(echo $APP_HOST_NAME | sed 's/cf\///g')
 
 if [[ "$CONJUR_VERSION" -eq "5" ]]
 then
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:pcf-service-broker}].api_key" 2>/dev/null')
+  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:cf-service-broker}].api_key" 2>/dev/null')
 
-  # load an entitlement into the pcf policy
+  # load an entitlement into the cf policy
   docker-compose run --rm \
-    -e CONJUR_AUTHN_LOGIN="host/pcf-service-broker" \
+    -e CONJUR_AUTHN_LOGIN="host/cf-service-broker" \
     -e CONJUR_AUTHN_API_KEY="$api_key" \
     --entrypoint bash client -c "
-      cat /policy/app-entitlements.yml | sed -e 's~<APP_HOST_NAME>~${APP_HOST_NAME}~' | conjur policy load pcf -
+      cat /policy/app-entitlements.yml | sed -e 's~<APP_HOST_NAME>~${APP_HOST_NAME}~' | conjur policy load cf -
     "
 else
-  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/pcf-service-broker'].api_key\" 2>/dev/null")
+  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/cf-service-broker'].api_key\" 2>/dev/null")
 
-  # reload the PCF policy with the entitlement added
+  # reload the CF policy with the entitlement added
   docker-compose exec -T conjur_4 \
     env APP_HOST_NAME=$APP_HOST_NAME \
     env CONJUR_AUTHN_API_KEY=$api_key \
-    env CONJUR_AUTHN_LOGIN="host/pcf-service-broker" \
+    env CONJUR_AUTHN_LOGIN="host/cf-service-broker" \
     bash -c '
       replace="s/<APP_HOST_NAME>/$APP_HOST_NAME/";
       cd /etc/policy/
-      cat /etc/policy/pcf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group pcf-admin-group
+      cat /etc/policy/cf_4_with_entitlement.yml | sed -e "$replace" | conjur policy load --as-group cf-admin-group
     '
 fi

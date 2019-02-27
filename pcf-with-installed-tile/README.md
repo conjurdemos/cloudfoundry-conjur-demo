@@ -32,7 +32,7 @@ conjur init -h https://conjur-pcf.itci.conjur.net -f ~/.conjurrc.pie
 export CONJURRC=~/.conjurrc.pie
 conjur authn login
 ```
-Authenticate as the `admin` user for the Conjur instance (or another user who has authority to modify `root` policy) - this demo will need to update `root` policy to add the `pcf` policy namespace and the `pcf-admin` user / group.
+Authenticate as the `admin` user for the Conjur instance (or another user who has authority to modify `root` policy) - this demo will need to update `root` policy to add the `cf` policy namespace and the `cf-admin` user / group.
 
 ## Running the demo
 Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling `./bin/start` (for v4) or `summon -p keyring.py ./bin/start` (for v5).
