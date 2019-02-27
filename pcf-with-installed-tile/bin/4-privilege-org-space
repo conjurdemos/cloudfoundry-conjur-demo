@@ -24,9 +24,9 @@ then
     -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
     --entrypoint bash cyberark/conjur-cli:5 -c '
       replace="s~<ORG_LAYER_NAME>~$ORG_LAYER_NAME~";
-      cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load pcf -
+      cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load cf -
 
       replace="s~<SPACE_LAYER_NAME>~$SPACE_LAYER_NAME~";
-      cat policy/space-entitlements.yml | sed -e "$replace" | conjur policy load pcf -
+      cat policy/space-entitlements.yml | sed -e "$replace" | conjur policy load cf -
     '
 fi

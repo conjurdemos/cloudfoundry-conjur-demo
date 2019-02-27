@@ -17,20 +17,20 @@ then
     -e CONJUR_APPLIANCE_URL="eval.conjur.org" \
     -e APPEND_STRING="$APPEND_STRING" \
     --entrypoint bash conjurinc/cli5 -c '
-      conjur variable values add pcf/org/database/username "org database username $APPEND_STRING";
-      conjur variable values add pcf/org/database/password "org database password $APPEND_STRING";
+      conjur variable values add cf/org/database/username "org database username $APPEND_STRING";
+      conjur variable values add cf/org/database/password "org database password $APPEND_STRING";
       
-      conjur variable values add pcf/space/database/username "space database username $APPEND_STRING";
-      conjur variable values add pcf/space/database/password "space database password $APPEND_STRING";
+      conjur variable values add cf/space/database/username "space database username $APPEND_STRING";
+      conjur variable values add cf/space/database/password "space database password $APPEND_STRING";
 
-      conjur variable values add pcf/app/database/username "app database username $APPEND_STRING";
-      conjur variable values add pcf/app/database/password "app database password $APPEND_STRING";
-      conjur variable values add pcf/app/stripe/private_key "a stripe private_key $APPEND_STRING"
+      conjur variable values add cf/app/database/username "app database username $APPEND_STRING";
+      conjur variable values add cf/app/database/password "app database password $APPEND_STRING";
+      conjur variable values add cf/app/stripe/private_key "a stripe private_key $APPEND_STRING"
     '
 else
-  conjur variable values add pcf/app/database/username "a database username $APPEND_STRING"
-  conjur variable values add pcf/app/database/password "a database password $APPEND_STRING"
-  conjur variable values add pcf/app/stripe/private_key "a stripe private_key $APPEND_STRING"
+  conjur variable values add cf/app/database/username "a database username $APPEND_STRING"
+  conjur variable values add cf/app/database/password "a database password $APPEND_STRING"
+  conjur variable values add cf/app/stripe/private_key "a stripe private_key $APPEND_STRING"
 fi
 
 cf restage $APP_NAME

@@ -1,16 +1,16 @@
 - !host
-  id: pcf-service-broker
+  id: cf-service-broker
   annotations:
     platform: cloudfoundry
 
 - !permit
-  role: !host pcf-service-broker
+  role: !host cf-service-broker
   privilege: read
-  resource: !host pcf-service-broker
+  resource: !host cf-service-broker
 
 - !group
-  id: pcf-admin-group
+  id: cf-admin-group
 
 - !grant
-  role: !group pcf-admin-group
-  member: !host pcf-service-broker
+  role: !group cf-admin-group
+  member: !host cf-service-broker

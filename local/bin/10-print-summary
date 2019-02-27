@@ -2,13 +2,13 @@
 
 APP_NAME="hello-world"
 
-echo -e "\n\nA demo space was created in the PCF deploy.\n"
-echo -e "The buildpacks were uploaded to PCF.\n"
+echo -e "\n\nA demo space was created in CloudFoundry.\n"
+echo -e "The buildpacks were uploaded to CloudFoundry.\n"
 echo -e "The service broker was uploaded and installed.\n"
-echo -e "The Conjur policy was loaded to the custom pcf namespace:"
+echo -e "The Conjur policy was loaded to the custom cf namespace:"
 echo -e "Set db username to 'a database username'"
 echo -e "Set db password to 'a database password'"
 echo -e "Set stripe private key to 'a stripe private_key'\n"
-echo -e "The demo '$APP_NAME' app was pushed to PCF.\n"
+echo -e "The demo '$APP_NAME' app was pushed to CloudFoundry.\n"
 echo -e "Updated policy grants to grant host access to secrets\n"
 echo -e "The demo '$APP_NAME' app was deployed to $(cf app $APP_NAME | grep routes | awk '{print $NF}')\n"
