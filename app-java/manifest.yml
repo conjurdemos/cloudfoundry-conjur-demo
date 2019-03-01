@@ -1,0 +1,8 @@
+applications:
+- name: hello-java
+  random-route: true
+  services: [ "conjur" ]
+  memory: 512M
+  buildpacks:
+  - conjur_buildpack
+  - java_buildpack

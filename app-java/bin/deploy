@@ -1,0 +1,4 @@
+#!/bin/bash
+set -e
+
+cf push -p target/hello-0.1.0.jar

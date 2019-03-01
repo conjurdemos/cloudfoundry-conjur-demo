@@ -1,0 +1,10 @@
+#!/bin/bash
+#
+# Builds the pet store application in a Docker container for portability
+
+docker run \
+  --rm \
+  -v $(pwd):/app \
+  -w /app \
+  maven:3.5.2-jdk-8 \
+  mvn package
