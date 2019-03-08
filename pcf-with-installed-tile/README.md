@@ -37,6 +37,13 @@ Authenticate as the `admin` user for the Conjur instance (or another user who ha
 ## Running the demo
 Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling `./bin/start` (for v4) or `summon -p keyring.py ./bin/start` (for v5).
 
+The demo scripts are configured to work with ["Try Conjur"](https://www.conjur.org/get-started/try-conjur.html)
+by default (`eval.conjur.org`). To use the scripts with a different Conjur instance, set the `APPLIANCE_URL`
+environment variable before running the demo scripts:
+```
+$ export APPLIANCE_URL="{your_appliance_url}"
+```
+
 ### What the script does
 The start-up script clears out your workspace - it deletes any previously deployed `hello-world` apps in the demo space, removes the Conjur service, and removes the demo space.
 
