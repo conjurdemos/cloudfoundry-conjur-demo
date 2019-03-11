@@ -19,7 +19,7 @@ then
     -e CONJUR_AUTHN_API_KEY="$API_KEY" \
     -e CONJUR_AUTHN_LOGIN="admin" \
     -e CONJUR_ACCOUNT="$ACCOUNT" \
-    -e CONJUR_APPLIANCE_URL="https://eval.conjur.org" \
+    -e CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}" \
     -e ORG_LAYER_NAME="$ORG_LAYER_NAME" \
     -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
     --entrypoint bash cyberark/conjur-cli:5 -c '
