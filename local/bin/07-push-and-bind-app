@@ -1,14 +1,6 @@
 #!/bin/bash -e
 
 pushd ../app
-
-  if [[ "$CONJUR_VERSION" -eq "5" ]]
-  then
-    cp secrets.v5.yml secrets.yml
-  else
-    cp secrets.v4.yml secrets.yml
-  fi
-
   cf push --no-start
 
   # Bind done automatically during cf push due to app's manifest.yml file

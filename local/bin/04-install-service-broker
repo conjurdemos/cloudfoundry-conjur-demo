@@ -14,18 +14,10 @@ popd
 rm -rf conjur-service-broker*
 
 # get service broker API key
-if [[ "$CONJUR_VERSION" -eq "5" ]]
-then
-  api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:cf-service-broker}].api_key" 2>/dev/null')
-  app_url="http://host.cfdev.sh"
-  account="default"
-  ssl_cert=""
-else
-  api_key=$(docker-compose exec -T conjur_4 su conjur -c "conjur-plugin-service authn env RAILS_ENV=appliance rails r \"puts User['host/cf-service-broker'].api_key\" 2>/dev/null")
-  app_url="https://host.cfdev.sh:8443/api"
-  account="cucumber"
-  ssl_cert="$(cat tmp/conjur.pem)"
-fi
+api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:cf-service-broker}].api_key" 2>/dev/null')
+app_url="http://host.cfdev.sh"
+account="default"
+ssl_cert=""
 
 # configuring the SB env
 cf set-env conjur-service-broker SECURITY_USER_NAME TEMP_USER
@@ -34,7 +26,7 @@ cf set-env conjur-service-broker CONJUR_ACCOUNT "$account"
 cf set-env conjur-service-broker CONJUR_APPLIANCE_URL "$app_url"
 cf set-env conjur-service-broker CONJUR_AUTHN_LOGIN "host/cf-service-broker"
 cf set-env conjur-service-broker CONJUR_AUTHN_API_KEY "$api_key"
-cf set-env conjur-service-broker CONJUR_VERSION "$CONJUR_VERSION"
+cf set-env conjur-service-broker CONJUR_VERSION 5
 cf set-env conjur-service-broker CONJUR_POLICY cf
 cf set-env conjur-service-broker CONJUR_SSL_CERTIFICATE "$ssl_cert"
 

@@ -3,27 +3,10 @@
 # stop will check the dir, make sure CF Dev is running and the `cf` binary is installed
 ./bin/stop
 
-if [[ "$CONJUR_VERSION" -eq "5" ]]
-then
-  docker-compose up -d pg conjur_5
+docker-compose up -d pg conjur_5
 
-  # wait for Conjur to be ready
-  docker-compose exec -T conjur_5 conjurctl wait -r 30 -p 80
-else
-  docker-compose up -d conjur_4
-
-  # configure Conjur
-  docker-compose exec -T \
-    conjur_4 bash -c "
-      /opt/conjur/evoke/bin/wait_for_conjur
-      evoke ca regenerate conjur_4
-      evoke ca regenerate host.cfdev.sh
-      /opt/conjur/evoke/bin/wait_for_conjur
-    "
-
-    mkdir tmp || true
-    docker cp $(docker-compose ps -q conjur_4):/opt/conjur/etc/ssl/ca.pem ./tmp/conjur.pem
-fi
+# wait for Conjur to be ready
+docker-compose exec -T conjur_5 conjurctl wait -r 30 -p 80
 
 # create an org and space for the deployed applications to live
 cf create-org demo-org

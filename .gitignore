@@ -1,4 +1,3 @@
 .idea/
 local/tmp
 local/meta-buildpack
-app/secrets.yml

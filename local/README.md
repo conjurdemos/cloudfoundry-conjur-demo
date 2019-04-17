@@ -25,9 +25,7 @@ practice, see the [Cloud Foundry integration tutorial](https://www.conjur.org/tu
 > We tested this demo to run with the [CF Dev 0.0.12](https://github.com/cloudfoundry-incubator/cfdev/releases/tag/v0.0.12)
 
 ## Running the demo
-This demo will work with either v4 or v5 Conjur. Before starting:
-* Set your `CONJUR_VERSION` environment variable to the version you would like to demo (either 4 or 5).
-
+Before starting:
 * Ensure that your CloudFoundry CLI (`cf`) is targeting your CF Dev instance. Instructions for this can be found at
   https://github.com/cloudfoundry-incubator/cfdev. For CF Dev `v0.0.12` this can be accomplished by running:
   ```
