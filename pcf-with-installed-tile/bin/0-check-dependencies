@@ -14,32 +14,22 @@ then
   fatal "Please cd to the pcf-with-installed-tile directory to run this demo."
 fi
 
-if [[ -z "$CONJUR_VERSION" ]] || [[ "$CONJUR_VERSION" -ne "5" && "$CONJUR_VERSION" -ne "4" ]]
-then
-  fatal "You must set the CONJUR_VERSION environment variable to 4 or 5 before running the demo."
-fi
-
 cli_major_version=$(conjur -v | awk '{print $NF}' | cut -d . -f 1)
-if [[ "$CONJUR_VERSION" -eq "4" ]] && [[ "$cli_major_version" -ne "5" ]]
+if [[ "$cli_major_version" -ne "5" ]]
 then
-  fatal "You must install conjur-cli v5 to run the v4 demo"
+  fatal "You must install conjur-cli v5 to run the demo"
 fi
 
 cf target -o cyberark-conjur-org -s cyberark-conjur-space
 sb_name=$(cf apps | grep conjur-service-broker | awk '{print $1;}')
 version=$(cf env $sb_name | grep CONJUR_VERSION | awk '{print $2;}')
 
-if [[ "$CONJUR_VERSION" -ne "$version" ]]
+if [[ "$version" -ne "5" ]]
 then
-  fatal "The value of your CONJUR_VERSION environment variable does not match the version of the Service Broker in your current PIE. Please log in to the correct PIE and try again."
+  fatal "Your service broker must have CONJUR_VERSION set to 5 to run this demo."
 fi
 
-if [[ "$CONJUR_VERSION" -eq "4" ]] && [[ -z "$CONJURRC" ]]
-then
-  fatal "Your CONJURRC is not set - please set it to point to the correct Conjur configuration."
-fi
-
-if [[ "$CONJUR_VERSION" -eq "5" ]] && [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
+if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
 then
   fatal "Your Conjur API Key and/or Account are missing from the environment."
 fi

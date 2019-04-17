@@ -13,20 +13,17 @@ echo "Organization layer in Conjur is: $ORG_LAYER_NAME"
 echo "Space layer in Conjur is: $SPACE_LAYER_NAME"
 
 # add an entitlement for the new host
-if [[ "$CONJUR_VERSION" -eq "5" ]]
-then
-  docker run -d -it -v $PWD:/work -w /work \
-    -e CONJUR_AUTHN_API_KEY="$API_KEY" \
-    -e CONJUR_AUTHN_LOGIN="admin" \
-    -e CONJUR_ACCOUNT="$ACCOUNT" \
-    -e CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}" \
-    -e ORG_LAYER_NAME="$ORG_LAYER_NAME" \
-    -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
-    --entrypoint bash cyberark/conjur-cli:5 -c '
-      replace="s~<ORG_LAYER_NAME>~$ORG_LAYER_NAME~";
-      cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load cf -
+docker run -d -it -v $PWD:/work -w /work \
+  -e CONJUR_AUTHN_API_KEY="$API_KEY" \
+  -e CONJUR_AUTHN_LOGIN="admin" \
+  -e CONJUR_ACCOUNT="$ACCOUNT" \
+  -e CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}" \
+  -e ORG_LAYER_NAME="$ORG_LAYER_NAME" \
+  -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
+  --entrypoint bash cyberark/conjur-cli:5 -c '
+    replace="s~<ORG_LAYER_NAME>~$ORG_LAYER_NAME~";
+    cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load cf -
 
-      replace="s~<SPACE_LAYER_NAME>~$SPACE_LAYER_NAME~";
-      cat policy/space-entitlements.yml | sed -e "$replace" | conjur policy load cf -
-    '
-fi
+    replace="s~<SPACE_LAYER_NAME>~$SPACE_LAYER_NAME~";
+    cat policy/space-entitlements.yml | sed -e "$replace" | conjur policy load cf -
+  '

@@ -16,8 +16,8 @@ Before beginning the demo, you will need to:
 - Add and remove spaces named `cyberark-conjur-demo` from your deployment, so make sure you choose an org that does not have an existing `demo` space.
 - Update the `root` policy in your Conjur account
 
-### Steps for Conjur version 5
-If connecting to a v5 Conjur instance, install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
+### Conjur Setup
+Install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that the demo script can access the Conjur account information when needed.
 
 Store the Conjur Account ID and API Key in the OSX keychain by calling:
 ```
@@ -25,17 +25,8 @@ $ security add-generic-password -s "summon" -a "conjur_pie/account" -w "ACCOUNTI
 $ security add-generic-password -s "summon" -a "conjur_pie/api_key" -w "APIKEY"
 ```
 
-### Steps for Conjur version 4
-Install version 5.x.x of the Conjur CLI and connect to our hosted Conjur v4 instance by running:
-```
-conjur init -h https://conjur-pcf.itci.conjur.net -f ~/.conjurrc.pie
-export CONJURRC=~/.conjurrc.pie
-conjur authn login
-```
-Authenticate as the `admin` user for the Conjur instance (or another user who has authority to modify `root` policy) - this demo will need to update `root` policy to add the `cf` policy namespace and the `cf-admin` user / group.
-
 ## Running the demo
-Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling `./bin/start` (for v4) or `summon -p keyring.py ./bin/start` (for v5).
+Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, we can run the [demo script](bin/start) by calling `summon -p keyring.py ./bin/start`.
 
 The demo scripts are configured to work with ["Try Conjur"](https://www.conjur.org/get-started/try-conjur.html)
 by default (`eval.conjur.org`). To use the scripts with a different Conjur instance, set the `APPLIANCE_URL`
