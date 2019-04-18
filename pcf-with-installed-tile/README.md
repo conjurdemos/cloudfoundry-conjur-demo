@@ -21,8 +21,8 @@ Install [Summon](https://github.com/cyberark/summon) and the [Summon-Keyring pro
 
 Store the Conjur Account ID and API Key in the OSX keychain by calling:
 ```
-$ security add-generic-password -s "summon" -a "conjur_pie/account" -w "ACCOUNTID"
-$ security add-generic-password -s "summon" -a "conjur_pie/api_key" -w "APIKEY"
+$ security add-generic-password -s "summon" -a "conjur/account" -w "ACCOUNTID"
+$ security add-generic-password -s "summon" -a "conjur/api_key" -w "APIKEY"
 ```
 
 ## Running the demo
