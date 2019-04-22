@@ -16,12 +16,6 @@ fi
 
 cf target -o cyberark-conjur-org -s cyberark-conjur-space
 sb_name=$(cf apps | grep conjur-service-broker | awk '{print $1;}')
-version=$(cf env $sb_name | grep CONJUR_VERSION | awk '{print $2;}')
-
-if [[ "$version" -ne "5" ]]
-then
-  fatal "Your service broker must have CONJUR_VERSION set to 5 to run this demo."
-fi
 
 if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
 then
