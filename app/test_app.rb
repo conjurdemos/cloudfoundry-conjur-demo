@@ -17,11 +17,6 @@ class TestApp < Sinatra::Application
       <h3>Space-wide Secrets</h3>
       <p>Database Username: #{ENV['SPACE_DB_USERNAME']}</p>
       <p>Database Password: #{ENV['SPACE_DB_PASSWORD']}</p>
-
-      <h3>App-specific Secrets</h3>
-      <p>Database Username: #{ENV['APP_DB_USERNAME']}</p>
-      <p>Database Password: #{ENV['APP_DB_PASSWORD']}</p>
-      <p>Stripe API Key: #{ENV['STRIPE_API_KEY']}</p>
     "
   end
 
