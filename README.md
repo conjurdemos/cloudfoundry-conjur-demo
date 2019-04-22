@@ -1,7 +1,7 @@
 # cloudfoundry-conjur-demo
 This repository contains two separate scripts for demonstrating that an
 application deployed to Cloud Foundry can access secrets stored in a Conjur
-instance.
+instance. This demo is for Conjur v5 only.
 
 - The [local](local/) directory includes a script that will stand up a local
 Conjur instance in a container, manually deploy the Conjur Service Broker to
@@ -10,9 +10,7 @@ the test [app](app/) to PCF to verify it can retrieve secrets from Conjur.
 
 - The [PCF with installed tile](pcf-with-installed-tile/) directory is for **Conjur engineers only**; it assumes that
 you have access to a PCF installation and that you have an existing Conjur
-installation up and running. In particular, this demo was built to work with
-Pivotal's Integration Environment, or PIE - a hosted deployment of PCF available
-to Pivotal partners. It requires that you install the Conjur Service Broker for
+installation up and running. It requires that you install the Conjur Service Broker for
 PCF service tile in the Ops Manager of your running PCF installation, and it
 deploys the test [app](app/) to PCF to verify it can retrieve secrets from Conjur.
 
