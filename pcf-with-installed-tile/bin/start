@@ -7,6 +7,5 @@ APP_NAME="hello-world"
 ./bin/3-create-conjur-service-instance
 ./bin/4-privilege-org-space
 ./bin/5-push-and-bind-app
-./bin/6-privilege-app
-./bin/7-start-app
-./bin/8-print-summary
+./bin/6-start-app
+./bin/7-print-summary
