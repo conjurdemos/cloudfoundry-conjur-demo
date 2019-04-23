@@ -1,7 +1,10 @@
 # cloudfoundry-conjur-demo
+
+**Please note that this demo is for Conjur v5 only**
+
 This repository contains two separate scripts for demonstrating that an
 application deployed to Cloud Foundry can access secrets stored in a Conjur
-instance. This demo is for Conjur v5 only.
+instance. 
 
 - The [local](local/) directory includes a script that will stand up a local
 Conjur instance in a container, manually deploy the Conjur Service Broker to

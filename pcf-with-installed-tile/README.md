@@ -1,5 +1,7 @@
 # cloudfoundry-conjur-demo
 
+**Please note that this demo is for Conjur v5 only**
+
 To run this demo, you must be working from the `pcf-with-installed-tile` directory.
 
 ## Steps to take before running demo

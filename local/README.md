@@ -1,4 +1,7 @@
 # cloudfoundry-conjur-demo
+
+**Please note that this demo is for Conjur v5 only**
+
 To run this demo, you must be working from the `local` directory.
 
 For simplicity, in this demo the Service Broker app is deployed to the same
