@@ -1,6 +1,7 @@
 #!/bin/bash -e
 APPEND_STRING=$1
 APP_NAME="hello-world"
+POLICY_PREFIX="${POLICY_PREFIX:-'cf'}"
 
 if [[ -z "$APPEND_STRING" ]]
   then
@@ -23,13 +24,13 @@ docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_APPLIANCE_URL="$CONJUR_APPLIANCE_URL" \
   -e CONJUR_SSL_CERTIFICATE="$CONJUR_SSL_CERTIFICATE" \
   -e APPEND_STRING="$APPEND_STRING" \
-  --entrypoint bash conjurinc/cli5 -ec '
-    conjur variable values add cf/org/database/username "org database username $APPEND_STRING";
-    conjur variable values add cf/org/database/password "org database password $APPEND_STRING";
+  --entrypoint bash conjurinc/cli5 -ec "
+    conjur variable values add $POLICY_PREFIX/org/database/username 'org database username $APPEND_STRING';
+    conjur variable values add $POLICY_PREFIX/org/database/password 'org database password $APPEND_STRING';
 
-    conjur variable values add cf/space/database/username "space database username $APPEND_STRING";
-    conjur variable values add cf/space/database/password "space database password $APPEND_STRING";
-  '
+    conjur variable values add $POLICY_PREFIX/space/database/username 'space database username $APPEND_STRING';
+    conjur variable values add $POLICY_PREFIX/space/database/password 'space database password $APPEND_STRING';
+  "
 
 cf restage $APP_NAME
 

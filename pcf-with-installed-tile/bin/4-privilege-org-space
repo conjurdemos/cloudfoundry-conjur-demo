@@ -2,6 +2,7 @@
 
 ORG_NAME="cyberark-demo"
 SPACE_NAME="cyberark-demo-space"
+POLICY_PREFIX="${POLICY_PREFIX:-'cf'}"
 
 ORG_GUID=$(cf org --guid "$ORG_NAME")
 SPACE_GUID=$(cf space --guid "$SPACE_NAME")
@@ -30,10 +31,10 @@ docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_SSL_CERTIFICATE="$CONJUR_SSL_CERTIFICATE" \
   -e ORG_LAYER_NAME="$ORG_LAYER_NAME" \
   -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
-  --entrypoint bash cyberark/conjur-cli:5 -ec '
-    replace="s~<ORG_LAYER_NAME>~$ORG_LAYER_NAME~";
-    cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load cf -
+  --entrypoint bash cyberark/conjur-cli:5 -exc "
+    replace=\"s~<ORG_LAYER_NAME>~\$ORG_LAYER_NAME~\";
+    cat policy/org-entitlements.yml | sed -e \"\$replace\" | conjur policy load  $POLICY_PREFIX -
 
-    replace="s~<SPACE_LAYER_NAME>~$SPACE_LAYER_NAME~";
-    cat policy/space-entitlements.yml | sed -e "$replace" | conjur policy load cf -
-  '
+    replace=\"s~<SPACE_LAYER_NAME>~\$SPACE_LAYER_NAME~\";
+    cat policy/space-entitlements.yml | sed -e \"\$replace\" | conjur policy load $POLICY_PREFIX -
+  "
