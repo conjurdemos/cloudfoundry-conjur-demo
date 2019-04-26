@@ -20,7 +20,7 @@ docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}" \
   -e ORG_LAYER_NAME="$ORG_LAYER_NAME" \
   -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
-  --entrypoint bash cyberark/conjur-cli:5 -c '
+  --entrypoint bash cyberark/conjur-cli:5 -ec '
     replace="s~<ORG_LAYER_NAME>~$ORG_LAYER_NAME~";
     cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load cf -
 
