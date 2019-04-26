@@ -7,7 +7,7 @@ if [[ -z "$APPEND_STRING" ]]
     APPEND_STRING=$RANDOM
 fi
 
-docker run -d -it -v $PWD:/work -w /work \
+docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_AUTHN_API_KEY="$API_KEY" \
   -e CONJUR_AUTHN_LOGIN="admin" \
   -e CONJUR_ACCOUNT="$ACCOUNT" \
