@@ -7,11 +7,21 @@ if [[ -z "$APPEND_STRING" ]]
     APPEND_STRING=$RANDOM
 fi
 
+CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}"
+CONJUR_APPLIANCE_HOST="${CONJUR_APPLIANCE_URL##*//}"
+
+if [[ "${CONJUR_APPLIANCE_URL}" =~ ^https:// ]]; then
+    CONJUR_SSL_CERTIFICATE=$(openssl s_client -showcerts -servername "$CONJUR_APPLIANCE_HOST" \
+        -connect "${CONJUR_APPLIANCE_HOST}:443" < /dev/null 2> /dev/null \
+        | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')
+fi
+
 docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_AUTHN_API_KEY="$API_KEY" \
   -e CONJUR_AUTHN_LOGIN="admin" \
   -e CONJUR_ACCOUNT="$ACCOUNT" \
-  -e CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}" \
+  -e CONJUR_APPLIANCE_URL="$CONJUR_APPLIANCE_URL" \
+  -e CONJUR_SSL_CERTIFICATE="$CONJUR_SSL_CERTIFICATE" \
   -e APPEND_STRING="$APPEND_STRING" \
   --entrypoint bash conjurinc/cli5 -ec '
     conjur variable values add cf/org/database/username "org database username $APPEND_STRING";
