@@ -6,7 +6,7 @@ To run this demo, you must be working from the `pcf-with-installed-tile` directo
 Before beginning the demo, you will need to:
 - Install the Conjur Service Tile for PCF in the Ops Manager. The Conjur Service Tile for PCF must be configured with credentials for a running Conjur instance. You can quickly get Conjur running by visiting [the hosted Conjur page](https://www.conjur.org/get-started/try-conjur.html) to sign up for a hosted Conjur instance. We will use this throughout the demo; keep your Account ID and API Key ready to use.
 - Install [`summon`](https://github.com/cyberark/summon).
-- Get [ring.py](https://github.com/conjurinc/summon-keyring/blob/master/ring.py) keyring provider for Summon.
+- Install [`summon-keyring`](https://github.com/conjurinc/summon-keyring) keyring provider for Summon.
 - Log into your Cloud Foundry deployment via the command line using `cf login` and run
   ```
   cf create-org cyberark-demo
@@ -28,7 +28,7 @@ $ security add-generic-password -s "summon" -a "conjur/api_key" -w "APIKEY"
 ```
 
 ## Running the demo
-Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, if you have the keyring provider [ring.py](https://github.com/conjurinc/summon-keyring/blob/master/ring.py) available, we can run the [demo script](bin/start) by calling `summon -p ring.py ./bin/start`.
+Our demo script will be modifying Conjur policy to add the application host to a group with access to the application's secrets, so it will need access to Conjur account info. Since we have stored this info in the OSX keyring, if you have the [keyring provider](https://github.com/conjurinc/summon-keyring) available, we can run the [demo script](bin/start) by calling `summon -p keyring.py ./bin/start`.
 
 The demo scripts are configured to work with ["Try Conjur"](https://www.conjur.org/get-started/try-conjur.html)
 by default (`eval.conjur.org`). To use the scripts with a different Conjur instance, set the `APPLIANCE_URL`
