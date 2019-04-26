@@ -14,12 +14,6 @@ then
   fatal "Please cd to the pcf-with-installed-tile directory to run this demo."
 fi
 
-cli_major_version=$(conjur -v | awk '{print $NF}' | cut -d . -f 1)
-if [[ "$cli_major_version" -ne "5" ]]
-then
-  fatal "You must install conjur-cli v5 to run the demo"
-fi
-
 cf target -o cyberark-conjur-org -s cyberark-conjur-space
 sb_name=$(cf apps | grep conjur-service-broker | awk '{print $1;}')
 version=$(cf env $sb_name | grep CONJUR_VERSION | awk '{print $2;}')
