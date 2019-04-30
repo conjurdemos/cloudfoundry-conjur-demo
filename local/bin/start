@@ -8,6 +8,5 @@
 ./bin/05-create-service-instance
 ./bin/06-privilege-org-space
 ./bin/07-push-and-bind-app
-./bin/08-privilege-app
-./bin/09-start-app
-./bin/10-print-summary
+./bin/08-start-app
+./bin/09-print-summary

@@ -2,6 +2,7 @@
 
 ORG_NAME="cyberark-demo"
 SPACE_NAME="cyberark-demo-space"
+POLICY_PREFIX="${POLICY_PREFIX:-'cf'}"
 
 ORG_GUID=$(cf org --guid "$ORG_NAME")
 SPACE_GUID=$(cf space --guid "$SPACE_NAME")
@@ -9,21 +10,31 @@ SPACE_GUID=$(cf space --guid "$SPACE_NAME")
 ORG_LAYER_NAME="$ORG_GUID"
 SPACE_LAYER_NAME="$ORG_GUID/$SPACE_GUID"
 
+CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}"
+CONJUR_APPLIANCE_HOST="${CONJUR_APPLIANCE_URL##*//}"
+
+if [[ "${CONJUR_APPLIANCE_URL}" =~ ^https:// ]]; then
+    CONJUR_SSL_CERTIFICATE=$(openssl s_client -showcerts -servername "$CONJUR_APPLIANCE_HOST" \
+        -connect "${CONJUR_APPLIANCE_HOST}:443" < /dev/null 2> /dev/null \
+        | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')
+fi
+
 echo "Organization layer in Conjur is: $ORG_LAYER_NAME"
 echo "Space layer in Conjur is: $SPACE_LAYER_NAME"
 
 # add an entitlement for the new host
-docker run -d -it -v $PWD:/work -w /work \
+docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_AUTHN_API_KEY="$API_KEY" \
   -e CONJUR_AUTHN_LOGIN="admin" \
   -e CONJUR_ACCOUNT="$ACCOUNT" \
-  -e CONJUR_APPLIANCE_URL="${APPLIANCE_URL:-'https://eval.conjur.org'}" \
+  -e CONJUR_APPLIANCE_URL="$CONJUR_APPLIANCE_URL" \
+  -e CONJUR_SSL_CERTIFICATE="$CONJUR_SSL_CERTIFICATE" \
   -e ORG_LAYER_NAME="$ORG_LAYER_NAME" \
   -e SPACE_LAYER_NAME="$SPACE_LAYER_NAME" \
-  --entrypoint bash cyberark/conjur-cli:5 -c '
-    replace="s~<ORG_LAYER_NAME>~$ORG_LAYER_NAME~";
-    cat policy/org-entitlements.yml | sed -e "$replace" | conjur policy load cf -
+  --entrypoint bash cyberark/conjur-cli:5 -exc "
+    replace=\"s~<ORG_LAYER_NAME>~\$ORG_LAYER_NAME~\";
+    cat policy/org-entitlements.yml | sed -e \"\$replace\" | conjur policy load  $POLICY_PREFIX -
 
-    replace="s~<SPACE_LAYER_NAME>~$SPACE_LAYER_NAME~";
-    cat policy/space-entitlements.yml | sed -e "$replace" | conjur policy load cf -
-  '
+    replace=\"s~<SPACE_LAYER_NAME>~\$SPACE_LAYER_NAME~\";
+    cat policy/space-entitlements.yml | sed -e \"\$replace\" | conjur policy load $POLICY_PREFIX -
+  "
