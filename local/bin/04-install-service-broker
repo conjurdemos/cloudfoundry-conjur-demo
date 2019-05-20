@@ -2,10 +2,11 @@
 APP_NAME="hello-world"
 
 # get the Conjur service broker, upload to cf, and configure
-curl -L $(curl -s https://api.github.com/repos/cyberark/conjur-service-broker/releases/latest | grep zipball_url | awk '{print $NF}' | sed 's/",*//g') > conjur-service-broker.zip
-unzip conjur-service-broker.zip
-repo_dir=$(ls | grep cyberark-conjur-service-broker)
-mv $repo_dir conjur-service-broker
+curl -L $(curl -s https://api.github.com/repos/cyberark/conjur-service-broker/releases/latest \
+          | grep browser_download_url \
+          | awk '{print $NF}' \
+          | sed 's/",*//g') > conjur-service-broker.zip
+unzip conjur-service-broker.zip -d conjur-service-broker
 
 # push the SB app
 pushd conjur-service-broker
