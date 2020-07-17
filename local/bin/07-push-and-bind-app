@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-pushd ../app
+pushd app
   cf push --no-start
 
   # Bind done automatically during cf push due to app's manifest.yml file

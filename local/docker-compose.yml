@@ -2,10 +2,10 @@ version: "2"
 
 services:
   conjur_5:
-    image: cyberark/conjur
+    image: cyberark/conjur:latest
     command: server -a default
     environment:
-      DATABASE_URL: postgres://postgres@pg/postgres
+      DATABASE_URL: postgres://postgres:supersecure@pg/postgres
       CONJUR_DATA_KEY: 'WMfApcDBtocRWV+ZSUP3Tjr5XNU+Z2FdBb6BEezejIs='
     ports:
       - 80:80
@@ -14,6 +14,8 @@ services:
 
   pg:
     image: postgres:9.4
+    environment:
+      POSTGRES_PASSWORD: supersecure
 
   client:
     image: cyberark/conjur-cli:5
