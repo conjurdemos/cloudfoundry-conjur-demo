@@ -1,4 +1,0 @@
-# Application layer has the secrets-users role
-- !grant
-  role: !group app/secrets-users
-  member: !host <APP_HOST_NAME>

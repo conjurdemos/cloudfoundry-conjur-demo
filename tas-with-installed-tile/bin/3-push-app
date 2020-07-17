@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+  
+set -euo pipefail
+
+. ./bin/utils.sh
+
+announce "Deploying sample application"
+
+pushd app
+  cf push --random-route
+
+  # App automatically binds to Conjur service instance due to app's manifest.yml file
+popd

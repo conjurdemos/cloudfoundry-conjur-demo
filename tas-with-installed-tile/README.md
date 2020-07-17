@@ -2,79 +2,73 @@
 
 **Please note that this demo is for Conjur OSS or DAP only**
 
-To run this demo, you must be working from the `tas-with-installed-tile` directory.
+In this demo, we will:
+- Create a Conjur service instance in a demo org / space.
+- Load Conjur policy to create a secret, and ensure any apps in the demo space
+  will have access to the secret.
+- Deploy a sample application to the demo space.
+- Verify that the Conjur service broker successfully granted the sample app a
+  Conjur identity, and that the identity was used to successfully retrieve the
+  secret we created from Conjur.
 
-## Steps to take before running demo
-Before beginning the demo, you will need to:
-- Install the Conjur Service Tile for VMWare Tanzu in the Ops Manager. The
-  Conjur Service Tile for VMWare Tanzu must be configured with credentials for a
-  running Conjur instance.
-- Install [`summon`](https://github.com/cyberark/summon).
-- Install [`summon-keyring`](https://github.com/conjurinc/summon-keyring)
-  provider for Summon.
-- Log into your Cloud Foundry deployment via the command line using `cf login`
-  and run
+## Requirements
+
+To run this demo, you will need:
+- A running [VMWare Tanzu Application Service](https://tanzu.vmware.com/application-service)
+  (TAS) foundation, v2.0+.
+- A running [CyberArk Dynamic Access Provider](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/platforms/platforms.html)
+  (DAP) cluster or [CyberArk Conjur OSS](https://docs.conjur.org/Latest/en/Content/OSS/Installation/Install_methods.htm)
+  instance, v11+.
+- [Summon](https://cyberark.github.io/summon) installed on your local machine.
+
+### Before you begin
+
+To prepare to run this demo:
+
+- Ensure you are working from the `tas-with-installed-tile` directory.
+- Set the following environment variables so that we can load policy to define a
+  secret and entitlements in a policy branch in this demo:
+  - `CONJUR_POLICY`: the policy branch used to configure your TAS tile. This is
+    where host identities are automatically added by the service broker.
+  - `CONJUR_ACCOUNT`: the account name for your Conjur / DAP instance.
+  - `CONJUR_AUTHN_LOGIN`: the identity of a Conjur user who can load a policy
+    into the `root` branch.
+  - `CONJUR_AUTHN_API_KEY`: the API key of your Conjur user.
+  - `CONJUR_APPLIANCE_URL`: the URL of your Conjur / DAP instance. When using a
+    high-availability DAP master cluster, this should be set to the URL of the
+    master load balancer.
+- Log in to your TAS foundation using `cf login`.
+- Create a `cyberark-demo` org in your TAS foundation:
   ```
   cf create-org cyberark-demo
   cf target -o cyberark-demo
   ```
-  You can verify that your installation of the Conjur Service Tile for VMWare
-  Tanzu is functioning correctly by verifying that the `cyberark-conjur` service
-  is available when you run `cf marketplace`.
 
-**WARNING:** Running the demo scripts will:
-- Add and remove spaces named `cyberark-conjur-demo` from your deployment, so
-  make sure you choose an org that does not have an existing `demo` space.
-- Update the `root` policy in your Conjur account
-
-### Conjur Setup
-Install [Summon](https://github.com/cyberark/summon) and the
-[Summon-Keyring provider](https://github.com/conjurinc/summon-keyring) so that
-the demo script can access the Conjur account information when needed.
-
-Store the Conjur Account ID and API Key in the OSX keychain by calling:
-```
-$ security add-generic-password -s "summon" -a "conjur/account" -w "ACCOUNTID"
-$ security add-generic-password -s "summon" -a "conjur/api_key" -w "APIKEY"
-```
+**IMPORTANT:** Running these demo scripts will:
+- Add and remove spaces from the `cyberark-demo` org in your TAS foundation.
+- Update Conjur policy, by:
+  - Adding a new policy branch with the demo secret and entitlements.
+  - Adding new policy branches for the demo org / space and a demo app identity.
 
 ## Running the demo
-Our demo script will be modifying Conjur policy to add the application host to
-a group with access to the application's secrets, so it will need access to
-Conjur account info. Since we have stored this info in the OSX keyring, if you
-have the [keyring provider](https://github.com/conjurinc/summon-keyring)
-available, we can run the [demo script](bin/start) by calling
-`summon -p keyring.py ./bin/start`.
 
-The demo scripts are configured to work with ["Try Conjur"](https://www.conjur.org/get-started/try-conjur.html)
-by default (`eval.conjur.org`). To use the scripts with a different Conjur
-instance, set the `APPLIANCE_URL` environment variable before running the demo
-scripts:
-```
-$ export APPLIANCE_URL="{your_appliance_url}"
-```
+The numbered demo scripts are located in [`bin/`](./bin/), and they run through
+the four steps outlined at the top of this README. There is a `./bin/start` script
+that will run through all of the steps for you, but we recommend running them
+one by one and looking at each to understand the commands they are running and
+what those commands do.
 
-### What the script does
-The start-up script clears out your workspace - it deletes any previously
-deployed `hello-world` apps in the demo space, removes the Conjur service, and
-removes the demo space.
+The final script [./bin/4-print-summary](./bin/4-print-summary) will output a
+summary of what changes have been made and how to access your running sample app.
+Navigate to the sample app URL in your browser; you will see that the app has
+access to the secrets that it retrieved from Conjur using the Conjur Buildpack,
+with machine identity provided by the Conjur Service Broker.
 
-It then creates a `demo` space within your org, creates the Conjur service, and
-deploys the sample application in `app` to TAS. It loads a Conjur policy that
-grants access to some database secrets to the application host, and binds the
-application to the Conjur service.
-
-### Verifying functionality
-The start-up script will output the URL for the test app. If you navigate to
-this URL, you will see that the app has access to the secrets that it retrieved
-from Conjur using its buildpack, with machine identity provided by the Conjur
-Service Broker.
-
-To verify that the service is in fact retrieving the actual secrets from Conjur,
-you can rotate the secrets and then restage the app, and it will display the new
-secret values that you set. We have included a [script](bin/rotate) for your
+To verify that the service is in fact retrieving the actual secret from Conjur,
+you can rotate the secret and then restage the app, and it will display the new
+secret value that you set. We have included a [rotate script](bin/rotate) for your
 convenience that will allow you to do that. To use it, run:
-`summon -p keyring.py ./bin/rotate [APPEND_STRING]`
+`./bin/rotate [APPEND_STRING]`
 
 The rotate script appends a random number to the end of the original secret
 values, unless you specify an `APPEND_STRING` argument to the script - in that
