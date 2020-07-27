@@ -37,6 +37,23 @@ To prepare to run this demo:
   - `CONJUR_APPLIANCE_URL`: the URL of your Conjur / DAP instance. When using a
     high-availability DAP master cluster, this should be set to the URL of the
     master load balancer.
+  - `CONJUR_SSL_CERTIFICATE`: the PEM-encoded x509 CA certificate chain for your
+     Conjur / DAP instance, provided as a string. This value may be obtained by
+     running the command:
+     ```sh-session
+     $ openssl s_client -showcerts -servername [DAP_INSTANCE_DNS_NAME] \
+       -connect [DAP_INSTANCE_DNS_NAME]:443 < /dev/null 2> /dev/null \
+       | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'
+     -----BEGIN CERTIFICATE-----
+     ...
+     -----END CERTIFICATE-----
+     ```
+
+     To populate this variable, you may dump the output of this command to a
+     file `conjur.pem` and load the variable by running:
+     ```
+     export CONJUR_SSL_CERTIFICATE="$(cat conjur.pem)"
+     ```
 - Log in to your TAS foundation using `cf login`.
 - Create a `cyberark-demo` org in your TAS foundation:
   ```

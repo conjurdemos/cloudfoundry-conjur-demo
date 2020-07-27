@@ -14,11 +14,6 @@ if [[ -z "$APPEND_STRING" ]]
     APPEND_STRING=$RANDOM
 fi
 
-CONJUR_APPLIANCE_HOST="${CONJUR_APPLIANCE_URL##*//}"
-CONJUR_SSL_CERTIFICATE=$(openssl s_client -showcerts -servername "$CONJUR_APPLIANCE_HOST" \
-  -connect "${CONJUR_APPLIANCE_HOST}:443" < /dev/null 2> /dev/null \
-  | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p')
-
 docker run --rm -it -v $PWD:/work -w /work \
   -e CONJUR_AUTHN_API_KEY="$CONJUR_AUTHN_API_KEY" \
   -e CONJUR_AUTHN_LOGIN="$CONJUR_AUTHN_LOGIN" \
