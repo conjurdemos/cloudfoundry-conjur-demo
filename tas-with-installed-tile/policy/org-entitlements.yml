@@ -1,3 +1,0 @@
-- !grant
-  role: !group org/secrets-users
-  member: !layer <ORG_LAYER_NAME>

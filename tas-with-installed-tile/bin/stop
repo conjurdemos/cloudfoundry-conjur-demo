@@ -1,4 +1,10 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. ./bin/utils.sh
+
+announce "Remove demo app and space"
 
 cf delete hello-world -f || true
 cf delete-service conjur -f || true

@@ -1,3 +1,0 @@
-- !policy
-  id: cf
-  owner: !group cf-admin-group

@@ -1,4 +1,8 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. ./bin/utils.sh
 
 fatal () {
   echo ""
@@ -9,17 +13,14 @@ fatal () {
 [[ -n `which cf` ]] || fatal "Cloud Foundry command line tool not found in \$PATH - read the README!"
 
 cur_dir=$(basename $(pwd))
-if [[ "$cur_dir" != "pcf-with-installed-tile" ]]
+if [[ "$cur_dir" != "tas-with-installed-tile" ]]
 then
-  fatal "Please cd to the pcf-with-installed-tile directory to run this demo."
+  fatal "Please cd to the tas-with-installed-tile directory to run this demo."
 fi
 
-cf target -o cyberark-conjur-org -s cyberark-conjur-space
-sb_name=$(cf apps | grep conjur-service-broker | awk '{print $1;}')
-
-if [[ -z "$API_KEY" || -z "$ACCOUNT" ]]
-then
-  fatal "Your Conjur API Key and/or Account are missing from the environment."
-fi
-
-echo "You are ready to run the demo."
+check_env_var "CONJUR_POLICY"
+check_env_var "CONJUR_ACCOUNT"
+check_env_var "CONJUR_AUTHN_LOGIN"
+check_env_var "CONJUR_AUTHN_API_KEY"
+check_env_var "CONJUR_APPLIANCE_URL"
+check_env_var "CONJUR_SSL_CERTIFICATE"

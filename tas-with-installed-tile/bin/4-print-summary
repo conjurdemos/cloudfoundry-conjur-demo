@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+  
+set -euo pipefail
+
+. ./bin/utils.sh
+
+APP_NAME="hello-world"
+
+announce "Printing summary"
+
+echo -e "\n\nCreated a demo space\n"
+echo -e "Created a Conjur service instance in the demo org/space\n"
+echo -e "Loaded Conjur policy:"
+echo -e "Added a secret to Conjur policy at 'cloudfoundry-demo/demo-secret'"
+echo -e "Added an entitlement so that all apps in the demo space can retrieve the secret"
+echo -e "Set the secret value to 'secret for the demo'\n"
+echo -e "The demo '$APP_NAME' app was deployed to $(cf app $APP_NAME | grep routes | awk '{print $NF}')\n"

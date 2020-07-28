@@ -1,7 +1,26 @@
-#!/bin/bash -e
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+. ./bin/utils.sh
 
 ./bin/stop
 
-cf target -o cyberark-demo
+announce "Creating demo space."
+
 cf create-space cyberark-demo-space
-cf target -s cyberark-demo-space
+cf target -o cyberark-demo -s cyberark-demo-space
+
+# Check for the Conjur service marketplace listing
+marketplace_listing=$(cf marketplace | grep cyberark-conjur)
+
+if [[ -z "${marketplace_listing}" ]]; then
+  announce "Conjur service is not available in the marketplace; aborting."
+  exit 1
+else
+  announce "Successfully verified Conjur service listing is available."
+fi
+
+announce "Creating Conjur service listing"
+
+cf create-service cyberark-conjur community conjur

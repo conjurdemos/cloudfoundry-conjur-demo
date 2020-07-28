@@ -1,6 +1,6 @@
 #!/bin/bash -e
 APP_NAME="hello-world"
 
-pushd ../app
+pushd app
   cf start $APP_NAME
 popd

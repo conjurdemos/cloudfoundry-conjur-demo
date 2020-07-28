@@ -1,0 +1,16 @@
+- !policy
+  id: cloudfoundry-demo
+
+  body:
+    - !variable demo-secret
+
+    - !group secret-users
+
+    - !permit
+      resource: !variable demo-secret
+      privileges: [ read, execute ]
+      role: !group secret-users
+
+    - !grant
+      role: !group secret-users
+      member: !layer /{{ CONJUR_POLICY }}/{{ ORG_GUID }}/{{ SPACE_GUID }}
