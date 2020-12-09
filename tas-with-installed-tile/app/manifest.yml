@@ -5,4 +5,4 @@ applications:
   - conjur
   buildpacks:
   - conjur_buildpack
-  - ruby_buildpack
+  - https://github.com/cloudfoundry/go-buildpack.git
