@@ -1,6 +1,6 @@
 # cloudfoundry-conjur-demo
 
-**Please note that this demo is for Conjur OSS or DAP only**
+**Please note that this demo is for Conjur Open Source or Enterprise only**
 
 In this demo, we will:
 - Create a Conjur service instance in a demo org / space.
@@ -16,8 +16,8 @@ In this demo, we will:
 To run this demo, you will need:
 - A running [VMWare Tanzu Application Service](https://tanzu.vmware.com/application-service)
   (TAS) foundation, v2.0+.
-- A running [CyberArk Dynamic Access Provider](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/platforms/platforms.html)
-  (DAP) cluster or [CyberArk Conjur OSS](https://docs.conjur.org/Latest/en/Content/OSS/Installation/Install_methods.htm)
+- A running [CyberArk Conjur Enterprise](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/platforms/platforms.html)
+  (formerly DAP) cluster or [CyberArk Conjur Open Source](https://docs.conjur.org/Latest/en/Content/OSS/Installation/Install_methods.htm)
   instance, v11+.
 - [Summon](https://cyberark.github.io/summon) installed on your local machine.
 
@@ -30,19 +30,19 @@ To prepare to run this demo:
   secret and entitlements in a policy branch in this demo:
   - `CONJUR_POLICY`: the policy branch used to configure your TAS tile. This is
     where host identities are automatically added by the service broker.
-  - `CONJUR_ACCOUNT`: the account name for your Conjur / DAP instance.
+  - `CONJUR_ACCOUNT`: the account name for your Conjur instance.
   - `CONJUR_AUTHN_LOGIN`: the identity of a Conjur user who can load a policy
     into the `root` branch.
   - `CONJUR_AUTHN_API_KEY`: the API key of your Conjur user.
-  - `CONJUR_APPLIANCE_URL`: the URL of your Conjur / DAP instance. When using a
-    high-availability DAP master cluster, this should be set to the URL of the
+  - `CONJUR_APPLIANCE_URL`: the URL of your Conjur instance. When using a
+    high-availability master cluster, this should be set to the URL of the
     master load balancer.
   - `CONJUR_SSL_CERTIFICATE`: the PEM-encoded x509 CA certificate chain for your
-     Conjur / DAP instance, provided as a string. This value may be obtained by
+     Conjur instance, provided as a string. This value may be obtained by
      running the command:
      ```sh-session
-     $ openssl s_client -showcerts -servername [DAP_INSTANCE_DNS_NAME] \
-       -connect [DAP_INSTANCE_DNS_NAME]:443 < /dev/null 2> /dev/null \
+     $ openssl s_client -showcerts -servername [CONJUR_INSTANCE_DNS_NAME] \
+       -connect [CONJUR_INSTANCE_DNS_NAME]:443 < /dev/null 2> /dev/null \
        | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p'
      -----BEGIN CERTIFICATE-----
      ...

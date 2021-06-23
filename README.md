@@ -1,6 +1,6 @@
 # cloudfoundry-conjur-demo
 
-**Please note that this demo is for Conjur OSS or DAP only**
+**Please note that this demo is for Conjur Open Source or Enterprise only**
 
 This repository contains two separate scripts for demonstrating that an
 application deployed to Cloud Foundry can access secrets stored in a Conjur
@@ -14,10 +14,10 @@ the test [app](app/) to CF to verify it can retrieve secrets from Conjur.
 - The [TAS with installed tile](tas-with-installed-tile/) directory is intended
   for **development purposes only**; it assumes that you have access to a VMWare
   Tanzu Application Service (TAS) installation and that you have an existing
-  Conjur or DAP installation up and running. It requires that you install the
-  Conjur Service Broker for VMWare Tanzu service tile in the Ops Manager of your
-  running TAS installation, and it deploys the test [app](app/) to TAS to verify
-  it can retrieve secrets from Conjur.
+  Conjur Open Source or Enterprise installation up and running. It requires that
+  you install the Conjur Service Broker for VMWare Tanzu service tile in the Ops
+  Manager of your running TAS installation, and it deploys the test [app](app/)
+  to TAS to verify it can retrieve secrets from Conjur.
 
 ## Contributing
 
