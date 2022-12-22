@@ -19,7 +19,7 @@ PLATFORMS
 
 DEPENDENCIES
   rack (>= 2.2.3)
-  sinatra (>= 2.0.8)
+  sinatra (>= 2.2.3)
 
 BUNDLED WITH
    2.1.4
