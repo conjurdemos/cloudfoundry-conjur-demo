@@ -3,7 +3,7 @@ GEM
   specs:
     mustermann (2.0.2)
       ruby2_keywords (~> 0.0.1)
-    rack (3.0.4.2)
+    rack (3.0.6.1)
     rack-protection (3.0.5)
       rack
     ruby2_keywords (0.0.5)
