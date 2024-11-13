@@ -1,3 +1,3 @@
 - !grant
   role: !group org/secrets-users
-  member: !layer <ORG_LAYER_NAME>
+  member: !group <ORG_GROUP_NAME>

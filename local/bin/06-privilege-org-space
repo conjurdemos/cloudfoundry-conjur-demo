@@ -5,11 +5,11 @@ SPACE_NAME="demo-space"
 ORG_GUID=$(cf org --guid "$ORG_NAME")
 SPACE_GUID=$(cf space --guid "$SPACE_NAME")
 
-ORG_LAYER_NAME="$ORG_GUID"
-SPACE_LAYER_NAME="$ORG_GUID/$SPACE_GUID"
+ORG_GROUP_NAME="$ORG_GUID"
+SPACE_GROUP_NAME="$ORG_GUID/$SPACE_GUID"
 
-echo "Organization layer in Conjur is: $ORG_LAYER_NAME"
-echo "Space layer in Conjur is: $SPACE_LAYER_NAME"
+echo "Organization group in Conjur is: $ORG_GROUP_NAME"
+echo "Space group in Conjur is: $SPACE_GROUP_NAME"
 
 api_key=$(docker-compose exec -T conjur_5 bash -c 'rails r "puts Role[%Q{default:host:cf-service-broker}].api_key" 2>/dev/null')
 
@@ -19,7 +19,7 @@ docker-compose run -T --rm \
   -e CONJUR_AUTHN_API_KEY="$api_key" \
   --entrypoint bash client -c "
     echo 'Entitling org...'
-    cat /policy/org-entitlements.yml | sed -e 's/<ORG_LAYER_NAME>/${ORG_LAYER_NAME}/' | conjur policy load cf -
+    cat /policy/org-entitlements.yml | sed -e 's/<ORG_GROUP_NAME>/${ORG_GROUP_NAME}/' | conjur policy load cf -
     echo 'Entitling space...'
-    cat /policy/space-entitlements.yml | sed -e 's~<SPACE_LAYER_NAME>~${SPACE_LAYER_NAME}~' | conjur policy load cf -
+    cat /policy/space-entitlements.yml | sed -e 's~<SPACE_GROUP_NAME>~${SPACE_GROUP_NAME}~' | conjur policy load cf -
  "
