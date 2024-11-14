@@ -3,11 +3,17 @@
 
   body:
     - !variable demo-secret
+    - !variable another-demo-secret
 
     - !group secret-users
 
     - !permit
       resource: !variable demo-secret
+      privileges: [ read, execute ]
+      role: !group secret-users
+
+    - !permit
+      resource: !variable another-demo-secret
       privileges: [ read, execute ]
       role: !group secret-users
 

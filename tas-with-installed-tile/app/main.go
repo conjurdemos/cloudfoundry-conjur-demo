@@ -24,10 +24,16 @@ func main() {
 			secret = secretValue
 		}
 
+		var anotherSecret = "[envvar not found]"
+		if secretValue, ok := os.LookupEnv("ANOTHER_DEMO_SECRET"); ok {
+			anotherSecret = secretValue
+		}
+
 		_, _ = fmt.Fprintf(res, `
 <h1>Visit us @ www.conjur.org!</h1>
 <p>App secret: %s</p>
-`, secret)
+<p>Another app secret: %s</p>
+`, secret, anotherSecret)
 		log.Infof("Handled request\n")
 	})
 
