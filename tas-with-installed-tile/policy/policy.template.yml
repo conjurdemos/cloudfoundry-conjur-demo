@@ -13,4 +13,4 @@
 
     - !grant
       role: !group secret-users
-      member: !layer /{{ CONJUR_POLICY }}/{{ ORG_GUID }}/{{ SPACE_GUID }}
+      member: !group /{{ CONJUR_POLICY }}/{{ ORG_GUID }}/{{ SPACE_GUID }}
