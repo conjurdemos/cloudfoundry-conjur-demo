@@ -1,23 +1,23 @@
 # cloudfoundry-conjur-demo
 
-**Please note that this demo is for Conjur Open Source or Enterprise only**
+**Please note that this demo is for Conjur OSS or CyberArk Secrets Manager, Self-Hosted only**
 
 In this demo, we will:
-- Create a Conjur service instance in a demo org / space.
-- Load Conjur policy to create a secret, and ensure any apps in the demo space
+- Create a Secrets Manager service instance in a demo org / space.
+- Load Secrets Manager policy to create a secret, and ensure any apps in the demo space
   will have access to the secret.
 - Deploy a sample application to the demo space.
-- Verify that the Conjur service broker successfully granted the sample app a
-  Conjur identity, and that the identity was used to successfully retrieve the
-  secret we created from Conjur.
+- Verify that the Secrets Manager service broker successfully granted the sample app a
+  Secrets Manager identity, and that the identity was used to successfully retrieve the
+  secret we created from Secrets Manager.
 
 ## Requirements
 
 To run this demo, you will need:
 - A running [VMWare Tanzu Application Service](https://tanzu.vmware.com/application-service)
   (TAS) foundation, v2.0+.
-- A running [CyberArk Conjur Enterprise](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Deployment/platforms/platforms.html)
-  (formerly DAP) cluster or [CyberArk Conjur Open Source](https://docs.conjur.org/Latest/en/Content/OSS/Installation/Install_methods.htm)
+- A running [CyberArk Secrets Manager, Self-Hosted](https://docs.cyberark.com/conjur-enterprise/latest/en/content/resources/_topnav/cc_home.htm)
+  (formerly Conjur Enterprise) cluster or [CyberArk Conjur Open Source](https://docs.cyberark.com/conjur-open-source/latest/en/content/hometileslps/lp-tile2.htm)
   instance, v11+.
 - [Summon](https://cyberark.github.io/summon) installed on your local machine.
 
@@ -30,15 +30,15 @@ To prepare to run this demo:
   secret and entitlements in a policy branch in this demo:
   - `CONJUR_POLICY`: the policy branch used to configure your TAS tile. This is
     where host identities are automatically added by the service broker.
-  - `CONJUR_ACCOUNT`: the account name for your Conjur instance.
-  - `CONJUR_AUTHN_LOGIN`: the identity of a Conjur user who can load a policy
+  - `CONJUR_ACCOUNT`: the account name for your Secrets Manager instance.
+  - `CONJUR_AUTHN_LOGIN`: the identity of a Secrets Manager user who can load a policy
     into the `root` branch.
-  - `CONJUR_AUTHN_API_KEY`: the API key of your Conjur user.
-  - `CONJUR_APPLIANCE_URL`: the URL of your Conjur instance. When using a
+  - `CONJUR_AUTHN_API_KEY`: the API key of your Secrets Manager user.
+  - `CONJUR_APPLIANCE_URL`: the URL of your Secrets Manager instance. When using a
     high-availability master cluster, this should be set to the URL of the
     master load balancer.
   - `CONJUR_SSL_CERTIFICATE`: the PEM-encoded x509 CA certificate chain for your
-     Conjur instance, provided as a string. This value may be obtained by
+     Secrets Manager instance, provided as a string. This value may be obtained by
      running the command:
      ```sh-session
      $ openssl s_client -showcerts -servername [CONJUR_INSTANCE_DNS_NAME] \
@@ -63,7 +63,7 @@ To prepare to run this demo:
 
 **IMPORTANT:** Running these demo scripts will:
 - Add and remove spaces from the `cyberark-demo` org in your TAS foundation.
-- Update Conjur policy, by:
+- Update Secrets Manager policy, by:
   - Adding a new policy branch with the demo secret and entitlements.
   - Adding new policy branches for the demo org / space and a demo app identity.
 
@@ -78,10 +78,10 @@ what those commands do.
 The final script [./bin/4-print-summary](./bin/4-print-summary) will output a
 summary of what changes have been made and how to access your running sample app.
 Navigate to the sample app URL in your browser; you will see that the app has
-access to the secrets that it retrieved from Conjur using the Conjur Buildpack,
-with machine identity provided by the Conjur Service Broker.
+access to the secrets that it retrieved from Secrets Manager using the Secrets Manager Buildpack,
+with machine identity provided by the Secrets Manager Service Broker.
 
-To verify that the service is in fact retrieving the actual secret from Conjur,
+To verify that the service is in fact retrieving the actual secret from Secrets Manager,
 you can rotate the secret and then restage the app, and it will display the new
 secret value that you set. We have included a [rotate script](bin/rotate) for your
 convenience that will allow you to do that. To use it, run:
