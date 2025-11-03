@@ -1,3 +1,0 @@
-- !grant
-  role: !group space/secrets-users
-  member: !group <SPACE_GROUP_NAME>

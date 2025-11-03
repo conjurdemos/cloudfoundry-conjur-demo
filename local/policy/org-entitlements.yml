@@ -1,3 +1,0 @@
-- !grant
-  role: !group org/secrets-users
-  member: !group <ORG_GROUP_NAME>

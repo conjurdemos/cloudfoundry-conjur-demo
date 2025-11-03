@@ -2,13 +2,8 @@
 
 **Please note that this demo is for Conjur OSS or CyberArk Secrets Manager, Self-Hosted only**
 
-This repository contains two separate scripts for demonstrating that an
-application deployed to Cloud Foundry can access secrets stored in a Secrets Manager instance. 
-
-- The [local](local/) directory includes a script that will stand up a local
-Secrets Manager instance in a container, manually deploy the Secrets Manager Service Broker to
-a locally running instance of [CF Dev](https://github.com/cloudfoundry-incubator/cfdev), and deploy
-the test [app](app/) to CF to verify it can retrieve secrets from Secrets Manager.
+This repository contains scripts for demonstrating that an application deployed to Cloud Foundry
+can access secrets stored in a Secrets Manager instance. 
 
 - The [TAS with installed tile](tas-with-installed-tile/) directory is intended
   for **development purposes only**; it assumes that you have access to a VMWare
