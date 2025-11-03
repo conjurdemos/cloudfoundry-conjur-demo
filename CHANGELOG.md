@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [1.0.1] - 2025-11-03
+
+### Changed
+- Update Golang demo to Go 1.25.3 (CONJSE-2067)
+
 ## [1.0.0] - 2025-09-25
 
 ### Changed
