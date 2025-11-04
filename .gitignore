@@ -1,4 +1,2 @@
 .idea/
-local/tmp
-local/meta-buildpack
 tas-with-installed-tile/policy/policy.yml
